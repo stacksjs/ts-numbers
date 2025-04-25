@@ -1,4 +1,4 @@
-import type { NumbersConfig, NumbersInstance, StyleRulesOption } from './types'
+import type { NumbersConfig, NumbersInstance } from './types'
 import { defaultConfig } from './config'
 import { formatNumber, parseNumber } from './format'
 

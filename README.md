@@ -24,6 +24,13 @@ A comprehensive, lightweight TypeScript library for formatting numbers, currenci
 - 💾 Data persistence options (localStorage, sessionStorage, cookies)
 - 🔄 History tracking with undo/redo functionality
 - 📊 Form validation integration
+- 📞 Phone number formatting with various patterns
+- ⚖️ Weight units with automatic conversion (kg, g, lb, oz)
+- 📏 Length units with automatic conversion (m, cm, mm, km, in, ft, yd, mi)
+- 🌡️ Temperature units with automatic conversion (°C, °F, K)
+- ⏱️ Time formatting (12h/24h)
+- 🔢 IP address formatting (IPv4/IPv6)
+- 💳 Credit card number formatting
 
 ## Installation
 
@@ -368,6 +375,128 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 
 - [JetBrains](https://www.jetbrains.com/)
 - [The Solana Foundation](https://solana.com/)
+
+## Specialized Number Types
+
+The library offers specialized formatting for different types of numbers:
+
+### Phone Numbers
+
+```typescript
+import { Numbers, phoneInternational, phoneUS } from 'ts-numbers'
+
+// U.S. phone number format: (123) 456-7890
+const phoneInput = new Numbers('#phone', phoneUS)
+
+// International phone number: +1 (123) 456-7890
+const intlPhone = new Numbers('#intl-phone', phoneInternational)
+
+// Custom phone format
+const customPhone = new Numbers('#custom-phone', {
+  isSpecializedType: 'phone',
+  specializedOptions: {
+    phoneFormat: '###-###-####',
+    countryCode: 'CA'
+  }
+})
+```
+
+### Weight Units
+
+```typescript
+import { createUnitConverter, Numbers, weightKg, weightLbs } from 'ts-numbers'
+
+// Weight in kilograms
+const kgInput = new Numbers('#weight-kg', weightKg)
+
+// Weight in pounds
+const lbsInput = new Numbers('#weight-lbs', weightLbs)
+
+// Converter that shows pounds when you enter kilograms
+const kgToLbs = new Numbers('#kg-to-lbs', createUnitConverter('kg', 'lb'))
+```
+
+### Length Units
+
+```typescript
+import { createUnitConverter, lengthCm, lengthFeet, lengthMeters, Numbers } from 'ts-numbers'
+
+// Length in meters
+const metersInput = new Numbers('#length-m', lengthMeters)
+
+// Length in centimeters
+const cmInput = new Numbers('#length-cm', lengthCm)
+
+// Length in feet
+const feetInput = new Numbers('#length-ft', lengthFeet)
+
+// Converter from meters to feet
+const mToFt = new Numbers('#m-to-ft', createUnitConverter('m', 'ft'))
+```
+
+### Temperature
+
+```typescript
+import { createUnitConverter, Numbers, tempCelsius, tempFahrenheit, tempKelvin } from 'ts-numbers'
+
+// Temperature in Celsius
+const celsiusInput = new Numbers('#temp-c', tempCelsius)
+
+// Temperature in Fahrenheit
+const fahrenheitInput = new Numbers('#temp-f', tempFahrenheit)
+
+// Temperature in Kelvin
+const kelvinInput = new Numbers('#temp-k', tempKelvin)
+
+// Converter from Celsius to Fahrenheit
+const cToF = new Numbers('#c-to-f', createUnitConverter('C', 'F'))
+```
+
+### Time Format
+
+```typescript
+import { Numbers, time12h, time24h } from 'ts-numbers'
+
+// 12-hour format with AM/PM
+const time12hInput = new Numbers('#time-12h', time12h)
+
+// 24-hour format
+const time24hInput = new Numbers('#time-24h', time24h)
+```
+
+### IP Addresses
+
+```typescript
+import { ipAddress, Numbers } from 'ts-numbers'
+
+// Format IPv4 addresses
+const ipv4Input = new Numbers('#ipv4', ipAddress)
+
+// Format IPv6 addresses
+const ipv6Input = new Numbers('#ipv6', {
+  ...ipAddress,
+  specializedOptions: {
+    ipVersion: 'v6'
+  }
+})
+```
+
+### Credit Card Numbers
+
+```typescript
+import { creditCard, Numbers } from 'ts-numbers'
+
+// Auto-detect card type
+const cardInput = new Numbers('#credit-card', creditCard)
+
+// Specific card format
+const amexCard = new Numbers('#amex-card', {
+  ...creditCard,
+  specializedOptions: {
+    creditCardFormat: 'amex'
+  }
+})
+```
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/ts-numbers?style=flat-square

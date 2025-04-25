@@ -1,5 +1,11 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock, spyOn, test } from 'bun:test'
 
+test('set button text', () => {
+  document.body.innerHTML = `<button>My button</button>`
+  const button = document.querySelector('button')
+  expect(button?.textContent).toEqual('My button')
+})
+
 // Example function to test
 function add(a: number, b: number): number {
   return a + b

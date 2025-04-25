@@ -1,5 +1,6 @@
 import type { FormatNumberOptions, NumbersConfig, ParseNumberOptions, RoundingMethod } from './types'
 import { defaultConfig } from './config'
+import { formatSpecializedNumber } from './specialized-formatter'
 
 /**
  * Round a number according to the specified rounding method
@@ -75,6 +76,11 @@ export function roundNumber(value: number, decimals: number, roundingMethod: Rou
  * Format a number according to the configuration
  */
 export function formatNumber({ value, config = {} }: FormatNumberOptions): string {
+  // Check for specialized number type formatting
+  if (config.isSpecializedType) {
+    return formatSpecializedNumber(value, config)
+  }
+
   // Convert value to string if it's a number
   const valueStr = typeof value === 'number' ? value.toString() : value
 
@@ -253,6 +259,11 @@ function formatManually(value: number, config: NumbersConfig): string {
 export function parseNumber({ value, config = {} }: ParseNumberOptions): number {
   const mergedConfig: NumbersConfig = { ...defaultConfig, ...config }
 
+  // Handle specialized number types
+  if (mergedConfig.isSpecializedType) {
+    return parseSpecializedNumber(value, mergedConfig)
+  }
+
   let stringValue = value.toString()
 
   // Remove currency symbol
@@ -287,6 +298,64 @@ export function parseNumber({ value, config = {} }: ParseNumberOptions): number 
 
   // Return NaN if parsing failed, otherwise return the number
   return Number.isNaN(numValue) ? 0 : numValue
+}
+
+/**
+ * Parse specialized number types back to numeric values
+ */
+function parseSpecializedNumber(value: string, config: NumbersConfig): number {
+  const type = config.isSpecializedType
+  const _options = config.specializedOptions || {}
+
+  // Extract only numeric values
+  const numericValue = value.replace(/[^\d.-]/g, '')
+
+  switch (type) {
+    case 'phone':
+      // For phone numbers, just extract the digits
+      return Number.parseFloat(numericValue || '0')
+
+    case 'time': {
+      // For time (HH:MM:SS or HH:MM), convert to seconds
+      // First remove any non-digit characters
+      const digits = value.replace(/\D/g, '')
+
+      if (digits.length <= 2) {
+        // Just hours
+        return Number.parseInt(digits, 10)
+      }
+      else if (digits.length <= 4) {
+        // Hours and minutes (HHMM)
+        const hours = Number.parseInt(digits.substring(0, 2), 10)
+        const minutes = Number.parseInt(digits.substring(2, 4), 10)
+        return hours * 60 + minutes
+      }
+      else {
+        // Hours, minutes, seconds (HHMMSS)
+        const hours = Number.parseInt(digits.substring(0, 2), 10)
+        const minutes = Number.parseInt(digits.substring(2, 4), 10)
+        const seconds = Number.parseInt(digits.substring(4, 6), 10)
+        return hours * 3600 + minutes * 60 + seconds
+      }
+    }
+
+    case 'ip': {
+      // For IP addresses, extract the first number (first octet for IPv4)
+      const matches = value.match(/(\d+)/)
+      return matches ? Number.parseInt(matches[1], 10) : 0
+    }
+
+    case 'creditCard':
+      // For credit cards, just extract all digits
+      return Number.parseFloat(numericValue || '0')
+
+    case 'weight':
+    case 'length':
+    case 'temperature':
+    case 'percentage':
+    default:
+      return Number.parseFloat(numericValue || '0')
+  }
 }
 
 /**

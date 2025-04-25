@@ -1,12 +1,72 @@
-// Default export for easy importing
+// Config and types
 import { Numbers } from './numbers'
 
-export * from './config'
-export * from './format'
-export * from './numbers'
-// Main class export
-export { Numbers } from './numbers'
-export * from './presets'
+export { config, defaultConfig } from './config'
 
-export * from './types'
+// Utility functions
+export { formatNumber, parseNumber, roundNumber } from './format'
+// Main class
+export { Numbers } from './numbers'
+
+// Presets
+export {
+  // Utility
+  createUnitConverter,
+  // Credit Card
+  creditCard,
+
+  // IP Address
+  ipAddress,
+  lengthCm,
+
+  lengthFeet,
+  // Lengths
+  lengthMeters,
+  // Percentage
+  percentageFormat,
+
+  phoneInternational,
+  // Phone numbers
+  phoneUS,
+  // Temperatures
+  tempCelsius,
+
+  tempFahrenheit,
+
+  tempKelvin,
+  // Time
+  time12h,
+
+  time24h,
+
+  // Weights
+  weightKg,
+
+  weightLbs,
+} from './presets'
+export {
+  formatCreditCard,
+  formatIPAddress,
+  formatLength,
+  formatPhoneNumber,
+  formatTemperature,
+  formatTime,
+  formatWeight,
+} from './specialized-formatter'
+
+export type {
+  CurrencyConfig,
+  FormatNumberOptions,
+  KeyboardShortcuts,
+  NumbersConfig,
+  NumbersInstance,
+  ParseNumberOptions,
+  RoundingMethod,
+  SpecializedNumberOptions,
+  SpecializedNumberType,
+  StyleRuleCallback,
+  StyleRuleRange,
+  StyleRulesOption,
+} from './types'
+
 export default Numbers
