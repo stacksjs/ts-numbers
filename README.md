@@ -6,23 +6,134 @@
 <!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
 <!-- [![Codecov][codecov-src]][codecov-href] -->
 
-# ts-numbers
+# TS-Numbers
 
-This is an opinionated TypeScript Starter kit to help kick-start development of your next Bun package.
+A simple, lightweight, and highly configurable TypeScript library for formatting numbers and currencies, inspired by AutoNumeric.
 
 ## Features
 
-This Starter Kit comes pre-configured with the following:
+- **Live formatting**: Format numbers and currencies as you type
+- **Highly configurable**: Customize decimal places, group separators, currency symbols, and more
+- **International support**: Built-in presets for various currencies and number formats
+- **DOM friendly**: Works with `<input>` elements as well as elements with the `contenteditable` attribute
+- **Modern TypeScript**: Written in TypeScript with full type safety
 
-- 🛠️ [Powerful Build Process](https://github.com/oven-sh/bun) - via Bun
-- 💪🏽 [Fully Typed APIs](https://www.typescriptlang.org/) - via TypeScript
-- 📚 [Documentation-ready](https://vitepress.dev/) - via VitePress
-- ⌘ [CLI & Binary](https://www.npmjs.com/package/bunx) - via Bun & CAC
-- 🧪 [Built With Testing In Mind](https://bun.sh/docs/cli/test) - pre-configured unit-testing powered by [Bun](https://bun.sh/docs/cli/test)
-- 🤖 [Renovate](https://renovatebot.com/) - optimized & automated PR dependency updates
-- 🎨 [ESLint](https://eslint.org/) - for code linting _(and formatting)_
-- 📦️ [pkg.pr.new](https://pkg.pr.new) - Continuous (Preview) Releases for your libraries
-- 🐙 [GitHub Actions](https://github.com/features/actions) - runs your CI _(fixes code style issues, tags releases & creates its changelogs, runs the test suite, etc.)_
+## Installation
+
+```bash
+bun add ts-numbers
+```
+
+or
+
+```bash
+npm install ts-numbers
+```
+
+## Usage
+
+### Basic Usage
+
+```typescript
+import Numbers from 'ts-numbers'
+
+// Format a number in an input element
+const element = document.querySelector('#price')
+const numbers = new Numbers(element, {
+  currencySymbol: '$',
+  digitGroupSeparator: ',',
+  decimalPlaces: 2
+})
+
+// Set a value programmatically
+numbers.set(1234.56) // Will display as "$1,234.56"
+```
+
+### Using Presets
+
+```typescript
+import Numbers, { euro, percentage } from 'ts-numbers'
+
+// Create a Euro-formatted input
+const euroInput = new Numbers('#euro-price', euro)
+
+// Create a percentage input
+const percentInput = new Numbers('#percentage', percentage)
+```
+
+### Configuration
+
+Create a `numbers.config.ts` file in your project root to set global defaults:
+
+```typescript
+import type { NumbersConfig } from 'ts-numbers'
+
+const config: NumbersConfig = {
+  decimalPlaces: 2,
+  currencySymbol: '$',
+  // ...other options
+}
+
+export default config
+```
+
+## API Reference
+
+### `Numbers` Class
+
+The main class for creating formatted number inputs.
+
+```typescript
+// Create a new instance
+const numbers = new Numbers(element, config)
+
+// Methods
+numbers.set(1234.56) // Set a new value
+numbers.get() // Get the formatted value as a string
+numbers.getNumber() // Get the raw value as a number
+numbers.update(config) // Update configuration
+numbers.clear() // Clear the value
+numbers.remove() // Remove event listeners and cleanup
+```
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `decimalPlaces` | number | 2 | Number of decimal places |
+| `decimalCharacter` | string | "." | Decimal separator character |
+| `digitGroupSeparator` | string | "," | Thousands separator character |
+| `currencySymbol` | string | "" | Currency symbol to display |
+| `currencySymbolPlacement` | "p" or "s" | "p" | Currency symbol placement (prefix/suffix) |
+| ... | ... | ... | Many more options available |
+
+See the [full documentation](https://github.com/your-username/ts-numbers) for all configuration options.
+
+## Predefined Formats
+
+The library includes several predefined formats for common currencies and number formats:
+
+- `dollar`: US Dollar format
+- `euro`: Euro format
+- `pound`: British Pound format
+- `yen`: Japanese Yen format
+- `franc`: Swiss Franc format
+- `rupee`: Indian Rupee format
+- `real`: Brazilian Real format
+- `yuan`: Chinese Yuan format
+- `ruble`: Russian Ruble format
+
+And number formats:
+
+- `integer`: Integer format with no decimal places
+- `float`: Float format with 2 decimal places
+- `percentage`: Percentage format with % suffix
+- `scientific`: Scientific notation format
+- `accounting`: Accounting format
+
+## License
+
+MIT
 
 ## Get Started
 
@@ -68,7 +179,7 @@ For casual chit-chat with others using this package:
 
 ## Postcardware
 
-“Software that is free, but hopes for a postcard.” We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
+"Software that is free, but hopes for a postcard." We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
 
 Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094, United States 🌎
 
@@ -78,12 +189,6 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 
 - [JetBrains](https://www.jetbrains.com/)
 - [The Solana Foundation](https://solana.com/)
-
-## License
-
-The MIT License (MIT). Please see [LICENSE](LICENSE.md) for more information.
-
-Made with 💙
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/ts-numbers?style=flat-square

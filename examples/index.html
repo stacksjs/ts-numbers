@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TS-Numbers Examples</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .example {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .example h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>TS-Numbers Examples</h1>
+
+  <div class="example">
+    <h2>Basic Number Formatting</h2>
+    <label for="basic-number">Enter a number:</label>
+    <input type="text" id="basic-number" placeholder="Enter a number">
+    <p>This example uses basic number formatting with two decimal places and comma as the thousands separator.</p>
+  </div>
+
+  <div class="example">
+    <h2>Dollar Currency</h2>
+    <label for="dollar-input">Enter dollar amount:</label>
+    <input type="text" id="dollar-input" placeholder="Enter dollar amount">
+    <p>This example uses the built-in dollar preset.</p>
+  </div>
+
+  <div class="example">
+    <h2>Euro Currency</h2>
+    <label for="euro-input">Enter euro amount:</label>
+    <input type="text" id="euro-input" placeholder="Enter euro amount">
+    <p>This example uses the built-in euro preset with a decimal comma and dot as the thousands separator.</p>
+  </div>
+
+  <div class="example">
+    <h2>Percentage</h2>
+    <label for="percentage-input">Enter percentage:</label>
+    <input type="text" id="percentage-input" placeholder="Enter percentage">
+    <p>This example uses the built-in percentage preset which adds a % suffix.</p>
+  </div>
+
+  <div class="example">
+    <h2>Custom Format (Bitcoin)</h2>
+    <label for="custom-input">Enter Bitcoin amount:</label>
+    <input type="text" id="custom-input" placeholder="Enter Bitcoin amount">
+    <p>This example uses a custom configuration with the Bitcoin symbol as suffix and 8 decimal places.</p>
+  </div>
+
+  <div class="example">
+    <h2>Programmatic Control</h2>
+    <label for="programmatic-input">Value controlled programmatically:</label>
+    <input type="text" id="programmatic-input" placeholder="1234.56">
+    <div class="buttons">
+      <button id="update-value">Set Random Value</button>
+      <button id="get-value">Get Current Value</button>
+    </div>
+    <p>This example demonstrates how to programmatically set and get values using the TS-Numbers API.</p>
+  </div>
+
+  <script type="module" src="basic.js"></script>
+</body>
+</html>
