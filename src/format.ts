@@ -72,117 +72,176 @@ export function roundNumber(value: number, decimals: number, roundingMethod: Rou
 }
 
 /**
- * Format number to string according to configuration
+ * Format a number according to the configuration
  */
 export function formatNumber({ value, config = {} }: FormatNumberOptions): string {
-  const mergedConfig: NumbersConfig = { ...defaultConfig, ...config }
+  // Convert value to string if it's a number
+  const valueStr = typeof value === 'number' ? value.toString() : value
 
-  // Convert value to number if it's a string
-  let numValue = typeof value === 'string' ? Number.parseFloat(value) : value
-
-  // Check if value is within min/max limits
-  const minValue = Number.parseFloat(mergedConfig.minimumValue || '-10000000000000')
-  const maxValue = Number.parseFloat(mergedConfig.maximumValue || '10000000000000')
-
-  if (numValue < minValue)
-    numValue = minValue
-  if (numValue > maxValue)
-    numValue = maxValue
-
-  const decimalPlaces = mergedConfig.decimalPlaces || 0
-
-  // Round the number
-  numValue = roundNumber(numValue, decimalPlaces, mergedConfig.roundingMethod || 'S')
-
-  // Convert to string and split into integer and decimal parts
-  const parts = numValue.toString().split('.')
-  let integerPart = parts[0]
-  let decimalPart = parts.length > 1 ? parts[1] : ''
-
-  // Handle negative numbers
-  const isNegative = integerPart.startsWith('-')
-  if (isNegative)
-    integerPart = integerPart.substring(1)
-
-  // Add digit group separators to integer part
-  const digitGroupSpacing = mergedConfig.digitGroupSpacing || '3'
-  const digitSeparator = mergedConfig.digitGroupSeparator || ','
-
-  if (digitSeparator && integerPart.length > 0) {
-    const spacing = Number.parseInt(digitGroupSpacing.toString(), 10)
-    const rgx = new RegExp(`(\\d)(?=(\\d{${spacing}})+(?!\\d))`, 'g')
-    integerPart = integerPart.replace(rgx, `$1${digitSeparator}`)
+  // Parse the number with the current configuration
+  let numValue: number
+  try {
+    numValue = parseNumber({ value: valueStr, config })
+  }
+  catch {
+    // Return original value if it can't be parsed
+    return valueStr
   }
 
-  // Handle decimal part
-  let formattedDecimalPart = ''
-  if (decimalPlaces > 0) {
-    const decimalChar = mergedConfig.decimalCharacter || '.'
+  // Apply scientific notation if configured
+  if (config.useScientificNotation
+    && config.scientificNotationThreshold
+    && Math.abs(numValue) >= config.scientificNotationThreshold) {
+    return formatScientificNotation(numValue, config)
+  }
 
-    // Pad or truncate decimal part to match decimalPlaces
-    if (mergedConfig.allowDecimalPadding === true) {
-      decimalPart = decimalPart.padEnd(decimalPlaces, '0').substring(0, decimalPlaces)
-    }
-    else if (mergedConfig.allowDecimalPadding === 'floats' && decimalPart.length > 0) {
-      decimalPart = decimalPart.padEnd(decimalPlaces, '0').substring(0, decimalPlaces)
+  // Handle internationalization if locale is set
+  if (config.locale) {
+    return formatWithLocale(numValue, config)
+  }
+
+  // Format the number manually
+  return formatManually(numValue, config)
+}
+
+/**
+ * Format a number in scientific notation
+ */
+function formatScientificNotation(value: number, config: NumbersConfig): string {
+  const decimalPlaces = config.decimalPlaces ?? 2
+
+  // Format with exponential notation
+  const formatted = value.toExponential(decimalPlaces)
+
+  // Apply currency symbol if defined
+  if (config.currencySymbol) {
+    return config.currencySymbolPlacement === 'p'
+      ? `${config.currencySymbol}${formatted}`
+      : `${formatted}${config.currencySymbol}`
+  }
+
+  // Apply suffix if defined
+  if (config.suffixText) {
+    return `${formatted}${config.suffixText}`
+  }
+
+  return formatted
+}
+
+/**
+ * Format a number using the Intl.NumberFormat for localization
+ */
+function formatWithLocale(value: number, config: NumbersConfig): string {
+  const { locale, decimalPlaces = 2, useGrouping = true, currencySymbol } = config
+
+  const options: Intl.NumberFormatOptions = {
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
+    useGrouping,
+  }
+
+  // Apply numbering system if specified
+  if (config.numberingSystem) {
+    options.numberingSystem = config.numberingSystem
+  }
+
+  // Add currency if specified
+  if (currencySymbol) {
+    if (currencySymbol.length <= 3 && /^[A-Z]{3}$/.test(currencySymbol)) {
+      // If it's a standard 3-letter currency code (like USD), use currency formatting
+      options.style = 'currency'
+      options.currency = currencySymbol
     }
     else {
-      decimalPart = decimalPart.substring(0, decimalPlaces)
-    }
-
-    if (decimalPart.length > 0) {
-      formattedDecimalPart = `${decimalChar}${decimalPart}`
-    }
-  }
-
-  // Build the final formatted string
-  let formattedValue = `${integerPart}${formattedDecimalPart}`
-
-  // Add currency symbol
-  const currencySymbol = mergedConfig.currencySymbol || ''
-  const currencySymbolPlacement = mergedConfig.currencySymbolPlacement || 'p'
-
-  // Add negative sign according to placement
-  const negativeSign = isNegative ? mergedConfig.negativeSignCharacter || '-' : ''
-  const positiveSign = !isNegative && mergedConfig.showPositiveSign ? mergedConfig.positiveSignCharacter || '+' : ''
-  const sign = isNegative ? negativeSign : positiveSign
-
-  // Add sign according to placement
-  const signPlacement = mergedConfig.negativePositiveSignPlacement
-
-  // Apply currency symbol and sign based on placement
-  if (currencySymbolPlacement === 'p') {
-    if (!signPlacement || signPlacement === 'p') {
-      formattedValue = `${sign}${currencySymbol}${formattedValue}`
-    }
-    else if (signPlacement === 'l') {
-      formattedValue = `${sign}${currencySymbol}${formattedValue}`
-    }
-    else if (signPlacement === 's') {
-      formattedValue = `${currencySymbol}${formattedValue}${sign}`
-    }
-    else { // 'r'
-      formattedValue = `${currencySymbol}${formattedValue}${sign}`
-    }
-  }
-  else { // 's'
-    if (!signPlacement || signPlacement === 'p') {
-      formattedValue = `${sign}${formattedValue}${currencySymbol}`
-    }
-    else if (signPlacement === 'l') {
-      formattedValue = `${sign}${formattedValue}${currencySymbol}`
-    }
-    else if (signPlacement === 's') {
-      formattedValue = `${formattedValue}${currencySymbol}${sign}`
-    }
-    else { // 'r'
-      formattedValue = `${formattedValue}${sign}${currencySymbol}`
+      // Otherwise, manually add the currency symbol
+      const formatted = new Intl.NumberFormat(locale, options).format(value)
+      return config.currencySymbolPlacement === 'p'
+        ? `${currencySymbol}${formatted}`
+        : `${formatted}${currencySymbol}`
     }
   }
 
-  // Add suffix text if present
-  if (mergedConfig.suffixText) {
-    formattedValue = `${formattedValue}${mergedConfig.suffixText}`
+  // Format with the locale
+  const formatted = new Intl.NumberFormat(locale, options).format(value)
+
+  // Add suffix if specified
+  if (config.suffixText) {
+    return `${formatted}${config.suffixText}`
+  }
+
+  return formatted
+}
+
+/**
+ * Format a number manually according to the configuration
+ */
+function formatManually(value: number, config: NumbersConfig): string {
+  const {
+    decimalPlaces = 2,
+    decimalCharacter = '.',
+    digitGroupSeparator = ',',
+    digitGroupSpacing = '3',
+    currencySymbol = '',
+    currencySymbolPlacement = 'p',
+    suffixText = '',
+    showPositiveSign = false,
+    negativeSignCharacter = '-',
+    positiveSignCharacter = '+',
+    roundingMethod = 'S',
+  } = config
+
+  // First round the number according to the rounding method
+  const roundedValue = roundNumber(value, decimalPlaces, roundingMethod)
+
+  // Convert to string and split into integer and decimal parts
+  const absValue = Math.abs(roundedValue)
+  let [integerPart, decimalPart = ''] = absValue.toFixed(decimalPlaces).split('.')
+
+  // Add decimal padding if configured
+  if (config.allowDecimalPadding === false && decimalPart) {
+    // Remove trailing zeros
+    decimalPart = decimalPart.replace(/0+$/, '')
+  }
+  else if (config.allowDecimalPadding === 'floats' && decimalPart) {
+    // Remove trailing zeros only for non-integer values
+    if (Number.parseInt(decimalPart, 10) === 0) {
+      decimalPart = ''
+    }
+    else {
+      decimalPart = decimalPart.replace(/0+$/, '')
+    }
+  }
+
+  // Format the integer part with group separators
+  if (digitGroupSeparator) {
+    const spacing = Number.parseInt(digitGroupSpacing.toString(), 10)
+    const pattern = new RegExp(`\\B(?=(\\d{${spacing}})+(?!\\d))`, 'g')
+    integerPart = integerPart.replace(pattern, digitGroupSeparator)
+  }
+
+  // Combine integer and decimal parts
+  let formattedValue = decimalPart
+    ? `${integerPart}${decimalCharacter}${decimalPart}`
+    : integerPart
+
+  // Add sign if needed
+  if (roundedValue < 0) {
+    formattedValue = `${negativeSignCharacter}${formattedValue}`
+  }
+  else if (showPositiveSign) {
+    formattedValue = `${positiveSignCharacter}${formattedValue}`
+  }
+
+  // Add currency symbol if defined
+  if (currencySymbol) {
+    formattedValue = currencySymbolPlacement === 'p'
+      ? `${currencySymbol}${formattedValue}`
+      : `${formattedValue}${currencySymbol}`
+  }
+
+  // Add suffix if defined
+  if (suffixText) {
+    formattedValue = `${formattedValue}${suffixText}`
   }
 
   return formattedValue

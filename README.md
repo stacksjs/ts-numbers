@@ -6,9 +6,210 @@
 <!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
 <!-- [![Codecov][codecov-src]][codecov-href] -->
 
-# ts-numbers
+# TypeScript Numbers 🔢
 
-A simple, lightweight, and highly configurable TypeScript library for formatting numbers and currencies, inspired by AutoNumeric.
+A comprehensive, lightweight TypeScript library for formatting numbers, currencies, and handling numeric inputs with advanced features.
+
+## Features
+
+- 🌐 Multiple currency support with automatic formatting
+- 📱 Mobile-friendly with touch controls
+- 🔣 Scientific notation support for large numbers
+- 🌍 Internationalization with locale-specific formatting
+- ⌨️ Customizable keyboard shortcuts
+- 🧩 Batch operations for multiple instances
+- 📋 Copy/paste format conversion
+- ♿ Accessibility improvements (ARIA attributes, screen reader support)
+- 🎨 Customizable styling with themes
+- 💾 Data persistence options (localStorage, sessionStorage, cookies)
+- 🔄 History tracking with undo/redo functionality
+- 📊 Form validation integration
+
+## Installation
+
+```bash
+npm install ts-numbers
+```
+
+## Basic Usage
+
+```typescript
+import { Numbers } from 'ts-numbers'
+
+// Create a new instance on an input element
+const myNum = new Numbers('#amount', {
+  decimalPlaces: 2,
+  currencySymbol: '$',
+  digitGroupSeparator: ',',
+})
+
+// Set a value
+myNum.set(1234.56) // Will display as "$1,234.56"
+
+// Get the numeric value
+const value = myNum.getNumber() // Returns 1234.56
+```
+
+## Configuration Options
+
+The library supports extensive configuration options:
+
+```typescript
+const config = {
+  // Core formatting options
+  decimalPlaces: 2,
+  decimalCharacter: '.',
+  digitGroupSeparator: ',',
+  currencySymbol: '$',
+
+  // Keyboard shortcuts
+  keyboardShortcuts: {
+    increment: 'Alt+ArrowUp',
+    decrement: 'Alt+ArrowDown',
+    toggleSign: 'Alt+-',
+    clear: 'Alt+C',
+  },
+
+  // Multiple currencies
+  currencies: {
+    USD: {
+      symbol: '$',
+      placement: 'p',
+      decimalPlaces: 2,
+      locale: 'en-US'
+    },
+    EUR: {
+      symbol: '€',
+      placement: 's',
+      decimalPlaces: 2,
+      locale: 'de-DE',
+      decimalCharacter: ',',
+      groupSeparator: '.'
+    }
+  },
+
+  // Scientific notation
+  useScientificNotation: true,
+  scientificNotationThreshold: 1000000,
+
+  // Localization
+  locale: 'en-US',
+  numberingSystem: 'latn',
+
+  // Persistence
+  persistenceMethod: 'localStorage',
+  persistenceKey: 'my-number-value',
+
+  // Accessibility
+  ariaLabel: 'Amount in dollars'
+}
+
+const myNum = new Numbers('#amount', config)
+```
+
+## Advanced Usage
+
+### Multiple Currencies
+
+```typescript
+// Configure with multiple currencies
+const myNum = new Numbers('#amount', {
+  currencies: {
+    USD: { symbol: '$', placement: 'p', decimalPlaces: 2, locale: 'en-US' },
+    EUR: { symbol: '€', placement: 's', decimalPlaces: 2, locale: 'de-DE' },
+    JPY: { symbol: '¥', placement: 'p', decimalPlaces: 0, locale: 'ja-JP' }
+  },
+  activeCurrency: 'USD'
+})
+
+// Switch currency
+myNum.setCurrency('EUR')
+```
+
+### Keyboard Shortcuts
+
+```typescript
+const myNum = new Numbers('#amount', {
+  keyboardShortcuts: {
+    increment: 'Alt+ArrowUp',
+    decrement: 'Alt+ArrowDown',
+    incrementLarge: 'Alt+Shift+ArrowUp',
+    decrementLarge: 'Alt+Shift+ArrowDown',
+    toggleSign: 'Alt+-',
+    clear: 'Alt+C',
+    undo: 'Alt+Z',
+    redo: 'Alt+Shift+Z'
+  }
+})
+```
+
+### Touch Controls for Mobile
+
+```typescript
+// Enable touch controls for all number inputs
+Numbers.enableTouchControls('input[type="number"]', {
+  buttonSize: '40px',
+  buttonStyle: 'circle',
+  position: 'right'
+})
+```
+
+### Batch Operations
+
+```typescript
+// Update all instances at once
+Numbers.updateAll({ decimalPlaces: 2 })
+
+// Set the same value to all instances
+Numbers.setAll(0)
+
+// Set the same currency to all instances
+Numbers.setCurrencyAll('EUR')
+```
+
+### Scientific Notation
+
+```typescript
+const myNum = new Numbers('#amount', {
+  useScientificNotation: true,
+  scientificNotationThreshold: 1000000
+})
+
+myNum.set(1234567) // Will display as "1.23e+6"
+```
+
+### Data Persistence
+
+```typescript
+const myNum = new Numbers('#amount', {
+  persistenceMethod: 'localStorage',
+  persistenceKey: 'user-amount'
+})
+```
+
+### Undo/Redo History
+
+```typescript
+// Undo last change
+myNum.undo()
+
+// Redo previously undone change
+myNum.redo()
+```
+
+## Browser Support
+
+The library supports all modern browsers:
+
+- Chrome, Edge (Chromium-based)
+- Firefox
+- Safari
+- Opera
+- Mobile browsers (iOS Safari, Chrome for Android)
+
+## License
+
+MIT
 
 ## Features
 
@@ -157,7 +358,7 @@ For casual chit-chat with others using this package:
 
 ## Postcardware
 
-“Software that is free, but hopes for a postcard.” We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
+"Software that is free, but hopes for a postcard." We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
 
 Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094, United States 🌎
 

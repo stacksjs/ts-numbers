@@ -70,6 +70,9 @@ export class Numbers implements NumbersInstance {
         inputElement.readOnly = true
       }
 
+      // Add accessibility attributes
+      this.setupAccessibility()
+
       // Add event listeners for input elements
       if (!this.config.noEventListeners) {
         this.element.addEventListener('focus', this.handleFocus.bind(this))
@@ -96,6 +99,7 @@ export class Numbers implements NumbersInstance {
     }
     else if (this.element.hasAttribute('contenteditable') && !this.config.noEventListeners) {
       // For contenteditable elements
+      this.setupAccessibility()
       this.element.addEventListener('focus', this.handleFocus.bind(this))
       this.element.addEventListener('blur', this.handleBlur.bind(this))
       this.element.addEventListener('keyup', this.handleKeyup.bind(this))
@@ -107,6 +111,9 @@ export class Numbers implements NumbersInstance {
     if (currentValue && this.config.formatOnPageLoad !== false) {
       this.set(currentValue)
     }
+
+    // Setup data persistence if configured
+    this.setupPersistence()
 
     this.initialized = true
   }
@@ -455,6 +462,9 @@ export class Numbers implements NumbersInstance {
    * Handle keydown event
    */
   private handleKeydown(e: KeyboardEvent): void {
+    // Handle keyboard shortcuts
+    this.handleKeyboardShortcuts(e)
+
     // Handle arrow keys for value modification
     if (this.config.modifyValueOnUpDownArrow && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
       e.preventDefault()
@@ -515,6 +525,102 @@ export class Numbers implements NumbersInstance {
         e.preventDefault()
       }
     }
+  }
+
+  /**
+   * Handle keyboard shortcuts
+   */
+  private handleKeyboardShortcuts(e: KeyboardEvent): void {
+    if (!this.config.keyboardShortcuts)
+      return
+
+    // Parse the shortcut key combinations
+    const matchesShortcut = (shortcut: string | undefined): boolean => {
+      if (!shortcut)
+        return false
+
+      const parts = shortcut.split('+')
+      const key = parts.pop()?.toLowerCase()
+      const alt = parts.includes('Alt')
+      const shift = parts.includes('Shift')
+      const ctrl = parts.includes('Ctrl')
+
+      return (
+        e.key.toLowerCase() === key?.toLowerCase()
+        && e.altKey === alt
+        && e.shiftKey === shift
+        && e.ctrlKey === ctrl
+      )
+    }
+
+    // Get current value
+    const currentValue = this.getNumber()
+
+    // Handle increment/decrement shortcuts
+    if (matchesShortcut(this.config.keyboardShortcuts.increment)) {
+      e.preventDefault()
+      this.set(currentValue + 1)
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.decrement)) {
+      e.preventDefault()
+      this.set(currentValue - 1)
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.incrementLarge)) {
+      e.preventDefault()
+      this.set(currentValue + 10)
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.decrementLarge)) {
+      e.preventDefault()
+      this.set(currentValue - 10)
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.toggleSign)) {
+      e.preventDefault()
+      this.set(currentValue * -1)
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.clear)) {
+      e.preventDefault()
+      this.clear()
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.undo)) {
+      e.preventDefault()
+      this.undo()
+    }
+    else if (matchesShortcut(this.config.keyboardShortcuts.redo)) {
+      e.preventDefault()
+      this.redo()
+    }
+
+    // Handle custom shortcuts
+    if (this.config.keyboardShortcuts.custom) {
+      Object.entries(this.config.keyboardShortcuts.custom).forEach(([shortcut, callback]) => {
+        if (matchesShortcut(shortcut)) {
+          e.preventDefault()
+          callback()
+        }
+      })
+    }
+  }
+
+  /**
+   * Go back one step in history
+   */
+  undo(): NumbersInstance {
+    if (this.historyIndex > 0) {
+      this.historyIndex -= 1
+      this.setElementValue(this.historyTable[this.historyIndex])
+    }
+    return this
+  }
+
+  /**
+   * Go forward one step in history
+   */
+  redo(): NumbersInstance {
+    if (this.historyIndex < this.historyTable.length - 1) {
+      this.historyIndex += 1
+      this.setElementValue(this.historyTable[this.historyIndex])
+    }
+    return this
   }
 
   /**
@@ -730,6 +836,9 @@ export class Numbers implements NumbersInstance {
    * Set a new value
    */
   set(value: number | string): NumbersInstance {
+    // Apply active currency configuration if available
+    const formatConfig = this.getActiveCurrencyConfig()
+
     // Check if value is valuesToStrings replacement
     if (typeof value === 'number' || typeof value === 'string') {
       if (this.config.valuesToStrings) {
@@ -785,11 +894,67 @@ export class Numbers implements NumbersInstance {
 
     const formattedValue = formatNumber({
       value,
-      config: this.config,
+      config: formatConfig,
     })
 
     this.setElementValue(formattedValue)
     return this
+  }
+
+  /**
+   * Gets the active currency configuration merged with base config
+   */
+  private getActiveCurrencyConfig(): NumbersConfig {
+    const { currencies, activeCurrency } = this.config
+
+    // If no active currency or no currencies defined, use the base config
+    if (!currencies || !activeCurrency || !currencies[activeCurrency]) {
+      return this.config
+    }
+
+    // Get the active currency config
+    const currencyConfig = currencies[activeCurrency]
+
+    // Apply the active currency settings
+    return {
+      ...this.config,
+      currencySymbol: currencyConfig.symbol,
+      currencySymbolPlacement: currencyConfig.placement,
+      decimalPlaces: currencyConfig.decimalPlaces,
+      locale: currencyConfig.locale,
+      digitGroupSeparator: currencyConfig.groupSeparator || this.config.digitGroupSeparator,
+      decimalCharacter: currencyConfig.decimalCharacter || this.config.decimalCharacter,
+    }
+  }
+
+  /**
+   * Set active currency
+   */
+  setCurrency(currencyCode: string): NumbersInstance {
+    if (!this.config.currencies || !this.config.currencies[currencyCode]) {
+      console.warn(`Currency '${currencyCode}' is not defined in the configuration`)
+      return this
+    }
+
+    // Update the active currency
+    this.config.activeCurrency = currencyCode
+
+    // Reformat the current value with the new currency settings
+    const currentValue = this.getNumber()
+    this.set(currentValue)
+
+    return this
+  }
+
+  /**
+   * Get available currencies
+   */
+  getAvailableCurrencies(): string[] {
+    if (!this.config.currencies) {
+      return []
+    }
+
+    return Object.keys(this.config.currencies)
   }
 
   /**
@@ -872,5 +1037,378 @@ export class Numbers implements NumbersInstance {
    */
   static getList(): Numbers[] {
     return [...numbersList]
+  }
+
+  /**
+   * Apply the same configuration update to all Numbers instances
+   */
+  static updateAll(config: Partial<NumbersConfig>): void {
+    numbersList.forEach(instance => instance.update(config))
+  }
+
+  /**
+   * Set the same value to all Numbers instances
+   */
+  static setAll(value: number | string): void {
+    numbersList.forEach(instance => instance.set(value))
+  }
+
+  /**
+   * Set active currency for all Numbers instances
+   */
+  static setCurrencyAll(currencyCode: string): void {
+    numbersList.forEach((instance) => {
+      if (instance.config.currencies && instance.config.currencies[currencyCode]) {
+        instance.setCurrency(currencyCode)
+      }
+    })
+  }
+
+  /**
+   * Remove all Numbers instances and clean up
+   */
+  static removeAll(): void {
+    // Create a copy of the list since remove() modifies it
+    const allInstances = [...numbersList]
+    allInstances.forEach(instance => instance.remove())
+
+    // Just to be safe, also clear the list directly
+    numbersList.length = 0
+  }
+
+  /**
+   * Find Numbers instances by selector
+   */
+  static find(selector: string): Numbers[] {
+    const elements = document.querySelectorAll(selector)
+    return numbersList.filter((instance) => {
+      const element = instance.getElement()
+      return Array.from(elements).includes(element)
+    })
+  }
+
+  /**
+   * Add touch-friendly controls for mobile devices
+   */
+  static enableTouchControls(selector: string, options: {
+    buttonSize?: string
+    buttonStyle?: 'circle' | 'square' | 'minimal'
+    position?: 'right' | 'left' | 'top' | 'bottom'
+    incrementText?: string
+    decrementText?: string
+  } = {}): void {
+    const {
+      buttonSize = '30px',
+      buttonStyle = 'circle',
+      position = 'right',
+      incrementText = '+',
+      decrementText = '−', // Note: this is the minus sign (U+2212), not hyphen
+    } = options
+
+    // Find all elements that match the selector
+    const elements = document.querySelectorAll(selector)
+
+    // Generate CSS for the touch controls
+    let styleElement = document.getElementById('numbers-touch-controls-style')
+    if (!styleElement) {
+      styleElement = document.createElement('style')
+      styleElement.id = 'numbers-touch-controls-style'
+      document.head.appendChild(styleElement)
+
+      // Add base styles
+      styleElement.textContent = `
+        .numbers-touch-wrapper {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+        }
+        .numbers-touch-controls {
+          display: flex;
+          user-select: none;
+        }
+        .numbers-touch-btn {
+          width: ${buttonSize};
+          height: ${buttonSize};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: calc(${buttonSize} * 0.5);
+          transition: background-color 0.2s, color 0.2s;
+        }
+        .numbers-touch-btn:active {
+          transform: scale(0.95);
+        }
+
+        /* Button styles */
+        .numbers-btn-circle {
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          border: 1px solid #ccc;
+        }
+        .numbers-btn-circle:hover {
+          background-color: #e0e0e0;
+        }
+
+        .numbers-btn-square {
+          background-color: #f0f0f0;
+          border: 1px solid #ccc;
+        }
+        .numbers-btn-square:hover {
+          background-color: #e0e0e0;
+        }
+
+        .numbers-btn-minimal {
+          background-color: transparent;
+          color: #555;
+        }
+        .numbers-btn-minimal:hover {
+          color: #000;
+        }
+
+        /* Position variants */
+        .numbers-controls-right {
+          flex-direction: row;
+          margin-left: 5px;
+        }
+        .numbers-controls-left {
+          flex-direction: row-reverse;
+          margin-right: 5px;
+        }
+        .numbers-controls-top {
+          flex-direction: column;
+          margin-bottom: 5px;
+        }
+        .numbers-controls-bottom {
+          flex-direction: column-reverse;
+          margin-top: 5px;
+        }
+      `
+    }
+
+    // Process each element
+    elements.forEach((element) => {
+      // Skip if already has touch controls
+      if (element.parentElement?.classList.contains('numbers-touch-wrapper')) {
+        return
+      }
+
+      // Create wrapper
+      const wrapper = document.createElement('div')
+      wrapper.className = 'numbers-touch-wrapper'
+
+      // Insert wrapper before the element
+      element.parentNode?.insertBefore(wrapper, element)
+
+      // Move the element into the wrapper
+      wrapper.appendChild(element)
+
+      // Create touch controls
+      const controlsContainer = document.createElement('div')
+      controlsContainer.className = `numbers-touch-controls numbers-controls-${position}`
+
+      // Create increment button
+      const incrementBtn = document.createElement('div')
+      incrementBtn.className = `numbers-touch-btn numbers-btn-${buttonStyle}`
+      incrementBtn.textContent = incrementText
+      incrementBtn.setAttribute('role', 'button')
+      incrementBtn.setAttribute('aria-label', 'Increment')
+
+      // Create decrement button
+      const decrementBtn = document.createElement('div')
+      decrementBtn.className = `numbers-touch-btn numbers-btn-${buttonStyle}`
+      decrementBtn.textContent = decrementText
+      decrementBtn.setAttribute('role', 'button')
+      decrementBtn.setAttribute('aria-label', 'Decrement')
+
+      // Add the buttons to the container
+      controlsContainer.appendChild(incrementBtn)
+      controlsContainer.appendChild(decrementBtn)
+
+      // Add the container to the wrapper
+      if (position === 'top' || position === 'left') {
+        wrapper.insertBefore(controlsContainer, element)
+      }
+      else {
+        wrapper.appendChild(controlsContainer)
+      }
+
+      // Add event listeners
+      const findInstance = () => {
+        return numbersList.find(instance => instance.getElement() === element)
+      }
+
+      incrementBtn.addEventListener('click', () => {
+        const instance = findInstance()
+        if (instance) {
+          const currentValue = instance.getNumber()
+          instance.set(currentValue + 1)
+        }
+      })
+
+      decrementBtn.addEventListener('click', () => {
+        const instance = findInstance()
+        if (instance) {
+          const currentValue = instance.getNumber()
+          instance.set(currentValue - 1)
+        }
+      })
+    })
+  }
+
+  /**
+   * Setup accessibility attributes
+   */
+  private setupAccessibility(): void {
+    // Add role for screen readers
+    if (this.isInput()) {
+      this.element.setAttribute('role', 'textbox')
+      this.element.setAttribute('inputmode', 'decimal')
+
+      // Add aria label if provided
+      if (this.config.ariaLabel) {
+        this.element.setAttribute('aria-label', this.config.ariaLabel)
+      }
+
+      // Add aria-labelledby if provided
+      if (this.config.ariaLabelledBy) {
+        this.element.setAttribute('aria-labelledby', this.config.ariaLabelledBy)
+      }
+
+      // Add description for screen readers about keyboard operations
+      const hasKeyboardShortcuts = this.config.keyboardShortcuts && Object.values(this.config.keyboardShortcuts).some(val => val)
+      if (hasKeyboardShortcuts) {
+        // Create a visually hidden element with keyboard instructions
+        const instructionsId = `num-instructions-${Math.random().toString(36).substr(2, 9)}`
+        const instructions = document.createElement('div')
+        instructions.id = instructionsId
+        instructions.className = 'sr-only' // Screen reader only class
+        instructions.style.position = 'absolute'
+        instructions.style.width = '1px'
+        instructions.style.height = '1px'
+        instructions.style.padding = '0'
+        instructions.style.overflow = 'hidden'
+        instructions.style.clip = 'rect(0, 0, 0, 0)'
+        instructions.style.whiteSpace = 'nowrap'
+        instructions.style.border = '0'
+
+        // Add keyboard shortcut info
+        let shortcutsText = 'Keyboard shortcuts: '
+        if (this.config.keyboardShortcuts?.increment) {
+          shortcutsText += `${this.config.keyboardShortcuts.increment} to increment, `
+        }
+        if (this.config.keyboardShortcuts?.decrement) {
+          shortcutsText += `${this.config.keyboardShortcuts.decrement} to decrement, `
+        }
+        if (this.config.keyboardShortcuts?.toggleSign) {
+          shortcutsText += `${this.config.keyboardShortcuts.toggleSign} to change sign, `
+        }
+
+        instructions.textContent = shortcutsText.slice(0, -2) // Remove trailing comma and space
+
+        // Insert after the input element
+        this.element.parentNode?.insertBefore(instructions, this.element.nextSibling)
+
+        // Link it to the input
+        this.element.setAttribute('aria-describedby', instructionsId)
+      }
+
+      // Add min/max constraints
+      if (this.config.minimumValue) {
+        this.element.setAttribute('aria-valuemin', this.config.minimumValue)
+      }
+      if (this.config.maximumValue) {
+        this.element.setAttribute('aria-valuemax', this.config.maximumValue)
+      }
+    }
+  }
+
+  /**
+   * Setup data persistence based on configuration
+   */
+  private setupPersistence(): void {
+    if (!this.config.persistenceMethod || !this.config.persistenceKey)
+      return
+
+    // Try to load the saved value
+    let savedValue: string | null = null
+
+    try {
+      if (this.config.persistenceMethod === 'sessionStorage') {
+        savedValue = sessionStorage.getItem(this.config.persistenceKey)
+      }
+      else if (this.config.persistenceMethod === 'localStorage') {
+        savedValue = localStorage.getItem(this.config.persistenceKey)
+      }
+      else if (this.config.persistenceMethod === 'cookie') {
+        savedValue = this.getCookie(this.config.persistenceKey)
+      }
+
+      if (savedValue) {
+        this.set(savedValue)
+      }
+    }
+    catch {
+      // Ignore storage errors (e.g., in private browsing mode)
+    }
+
+    // Setup save handlers
+    if (this.isInput() && !this.config.noEventListeners) {
+      this.element.addEventListener('change', this.saveValueToPersistence.bind(this))
+    }
+  }
+
+  /**
+   * Save the current value to the selected persistence method
+   */
+  private saveValueToPersistence(): void {
+    if (!this.config.persistenceMethod || !this.config.persistenceKey)
+      return
+
+    const value = this.getNumber().toString()
+
+    try {
+      if (this.config.persistenceMethod === 'sessionStorage') {
+        sessionStorage.setItem(this.config.persistenceKey, value)
+      }
+      else if (this.config.persistenceMethod === 'localStorage') {
+        localStorage.setItem(this.config.persistenceKey, value)
+      }
+      else if (this.config.persistenceMethod === 'cookie') {
+        this.setCookie(this.config.persistenceKey, value, 30) // 30 days expiry
+      }
+    }
+    catch {
+      // Ignore storage errors
+    }
+  }
+
+  /**
+   * Helper to get a cookie value
+   */
+  private getCookie(name: string): string | null {
+    const nameEQ = `${name}=`
+    const ca = document.cookie.split(';')
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i]
+      while (c.charAt(0) === ' ')
+        c = c.substring(1, c.length)
+      if (c.indexOf(nameEQ) === 0)
+        return c.substring(nameEQ.length, c.length)
+    }
+    return null
+  }
+
+  /**
+   * Helper to set a cookie
+   */
+  private setCookie(name: string, value: string, days: number): void {
+    let expires = ''
+    if (days) {
+      const date = new Date()
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+      expires = `; expires=${date.toUTCString()}`
+    }
+    document.cookie = `${name}=${value}${expires}; path=/`
   }
 }

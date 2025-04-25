@@ -45,6 +45,17 @@ export const defaultConfig: NumbersConfig = {
   roundingMethod: 'S',
   isCancellable: true,
   negativePositiveSignBehavior: false,
+  keyboardShortcuts: {
+    increment: 'Alt+ArrowUp',
+    decrement: 'Alt+ArrowDown',
+    incrementLarge: 'Alt+Shift+ArrowUp',
+    decrementLarge: 'Alt+Shift+ArrowDown',
+    toggleSign: 'Alt+-',
+    clear: 'Alt+C',
+    undo: 'Alt+Z',
+    redo: 'Alt+Shift+Z',
+    custom: null,
+  },
 
   // Scaling options
   divisorWhenUnfocused: null,
@@ -69,6 +80,27 @@ export const defaultConfig: NumbersConfig = {
   // Styling
   styleRules: null,
   valuesToStrings: null,
+
+  // Accessibility options
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
+
+  // Localization
+  locale: 'en-US',
+  useGrouping: true,
+  numberingSystem: null,
+
+  // Persistence
+  persistenceMethod: null,
+  persistenceKey: 'numbers-value',
+
+  // Scientific notation
+  useScientificNotation: false,
+  scientificNotationThreshold: 1e6,
+
+  // Multiple currencies
+  currencies: null,
+  activeCurrency: undefined,
 }
 
 // eslint-disable-next-line antfu/no-top-level-await

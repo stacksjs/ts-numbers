@@ -13,7 +13,17 @@
   "bugs": {
     "url": "https://github.com/stacksjs/ts-numbers/issues"
   },
-  "keywords": ["typescript", "starter", "kit", "bun", "package"],
+  "keywords": [
+    "numbers",
+    "autonumeric",
+    "currency",
+    "temperature",
+    "weights",
+    "length",
+    "phone numbers",
+    "format",
+    "typescript"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
