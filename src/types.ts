@@ -14,9 +14,11 @@ export interface NumbersConfig {
   minimumValue?: string
   maximumValue?: string
 
-  // Formatting behavior
+  // Decimal behavior
   allowDecimalPadding?: boolean | 'floats'
   alwaysAllowDecimalCharacter?: boolean
+
+  // Display and interaction
   caretPositionOnFocus?: 'start' | 'end' | 'decimalChar' | null
   emptyInputBehavior?: 'focus' | 'press' | 'always' | 'min' | 'max' | 'zero' | 'null' | string
   leadingZero?: 'allow' | 'deny' | 'keep'
@@ -27,13 +29,61 @@ export interface NumbersConfig {
   positiveSignCharacter?: string
   showPositiveSign?: boolean
   suffixText?: string
+  negativeBracketsTypeOnBlur?: string | null
 
   // Interaction options
   selectOnFocus?: boolean
+  selectNumberOnly?: boolean
   readOnly?: boolean
   modifyValueOnWheel?: boolean
   wheelStep?: 'progressive' | string | number
+  modifyValueOnUpDownArrow?: boolean
+  upDownStep?: 'progressive' | string | number
   roundingMethod?: RoundingMethod
+  isCancellable?: boolean
+  negativePositiveSignBehavior?: boolean
+
+  // Scaling options
+  divisorWhenUnfocused?: number | null
+  decimalPlacesShownOnBlur?: number | null
+  decimalPlacesShownOnFocus?: number | null
+  symbolWhenUnfocused?: string | null
+
+  // Advanced behavior
+  overrideMinMaxLimits?: 'ceiling' | 'floor' | 'ignore' | 'invalid' | null
+  valueOverride?: string | null
+  onInvalidPaste?: 'error' | 'ignore' | 'clamp' | 'truncate' | 'replace'
+  formulaMode?: boolean
+  unformatOnHover?: boolean
+  unformatOnSubmit?: boolean
+  saveValueToSessionStorage?: boolean
+  watchExternalChanges?: boolean
+  createLocalList?: boolean
+  wheelOn?: 'focus' | 'hover'
+  noEventListeners?: boolean
+  formatOnPageLoad?: boolean
+
+  // Styling
+  styleRules?: StyleRulesOption | null
+  valuesToStrings?: Record<string, string> | null
+}
+
+export interface StyleRulesOption {
+  positive?: string | null
+  negative?: string | null
+  ranges?: StyleRuleRange[]
+  userDefined?: StyleRuleCallback[]
+}
+
+export interface StyleRuleRange {
+  min: number
+  max: number
+  class: string
+}
+
+export interface StyleRuleCallback {
+  callback: (rawValue: number | string) => boolean | number | number[] | null
+  classes: string | string[]
 }
 
 export type RoundingMethod =

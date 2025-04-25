@@ -17,9 +17,11 @@ export const defaultConfig: NumbersConfig = {
   minimumValue: '-10000000000000',
   maximumValue: '10000000000000',
 
-  // Formatting behavior
+  // Decimal behavior
   allowDecimalPadding: true,
   alwaysAllowDecimalCharacter: false,
+
+  // Display and interaction
   caretPositionOnFocus: null,
   emptyInputBehavior: 'focus',
   leadingZero: 'deny',
@@ -30,13 +32,43 @@ export const defaultConfig: NumbersConfig = {
   positiveSignCharacter: '+',
   showPositiveSign: false,
   suffixText: '',
+  negativeBracketsTypeOnBlur: null,
 
   // Interaction options
   selectOnFocus: true,
+  selectNumberOnly: false,
   readOnly: false,
   modifyValueOnWheel: true,
   wheelStep: 'progressive',
+  modifyValueOnUpDownArrow: true,
+  upDownStep: 'progressive',
   roundingMethod: 'S',
+  isCancellable: true,
+  negativePositiveSignBehavior: false,
+
+  // Scaling options
+  divisorWhenUnfocused: null,
+  decimalPlacesShownOnBlur: null,
+  decimalPlacesShownOnFocus: null,
+  symbolWhenUnfocused: null,
+
+  // Advanced behavior
+  overrideMinMaxLimits: null,
+  valueOverride: null,
+  onInvalidPaste: 'error',
+  formulaMode: false,
+  unformatOnHover: true,
+  unformatOnSubmit: false,
+  saveValueToSessionStorage: false,
+  watchExternalChanges: false,
+  createLocalList: true,
+  wheelOn: 'focus',
+  noEventListeners: false,
+  formatOnPageLoad: true,
+
+  // Styling
+  styleRules: null,
+  valuesToStrings: null,
 }
 
 // eslint-disable-next-line antfu/no-top-level-await

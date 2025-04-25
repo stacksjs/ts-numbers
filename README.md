@@ -6,7 +6,7 @@
 <!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
 <!-- [![Codecov][codecov-src]][codecov-href] -->
 
-# TS-Numbers
+# ts-numbers
 
 A simple, lightweight, and highly configurable TypeScript library for formatting numbers and currencies, inspired by AutoNumeric.
 
@@ -107,7 +107,7 @@ numbers.remove() // Remove event listeners and cleanup
 | `currencySymbolPlacement` | "p" or "s" | "p" | Currency symbol placement (prefix/suffix) |
 | ... | ... | ... | Many more options available |
 
-See the [full documentation](https://github.com/your-username/ts-numbers) for all configuration options.
+See the [full documentation](https://github.com/stacksjs/ts-numbers) for all configuration options.
 
 ## Predefined Formats
 
@@ -130,28 +130,6 @@ And number formats:
 - `percentage`: Percentage format with % suffix
 - `scientific`: Scientific notation format
 - `accounting`: Accounting format
-
-## License
-
-MIT
-
-## Get Started
-
-It's rather simple to get your package development started:
-
-```bash
-# you may use this GitHub template or the following command:
-bunx degit stacksjs/ts-numbers my-pkg
-cd my-pkg
-
-bun i # install all deps
-bun run build # builds the library for production-ready use
-
-# after you have successfully committed, you may create a "release"
-bun run release # automates git commits, versioning, and changelog generations
-```
-
-_Check out the package.json scripts for more commands._
 
 ## Testing
 
