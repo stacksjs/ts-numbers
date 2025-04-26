@@ -27,13 +27,6 @@ import {
   weightLbs,
 } from '../src'
 
-// we use happydom to test DOM elements
-it('set button text', () => {
-  document.body.innerHTML = `<button>My button</button>`
-  const button = document.querySelector('button')
-  expect(button?.textContent).toEqual('My button')
-})
-
 describe('Basic Formatting', () => {
   it('formats numbers with default options', () => {
     expect(formatNumber({ value: 1234.5678 })).toBe('1,234.57')
