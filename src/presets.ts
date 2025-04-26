@@ -124,6 +124,115 @@ export const accounting: NumbersConfig = {
 }
 
 /**
+ * Arabic (Egypt) format options with Arabic numerals
+ */
+export const arabicEG: NumbersConfig = {
+  locale: 'ar-EG',
+  numberingSystem: 'arab',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSeparator: '٬',
+  decimalCharacter: '٫',
+}
+
+/**
+ * Arabic (Saudi Arabia) format options
+ */
+export const arabicSA: NumbersConfig = {
+  locale: 'ar-SA',
+  numberingSystem: 'arab',
+  useGrouping: true,
+  decimalPlaces: 2,
+  currencySymbol: 'ر.س.‏',
+  currencySymbolPlacement: 'p',
+}
+
+/**
+ * Hindi (India) format options with Devanagari numerals
+ */
+export const hindiIN: NumbersConfig = {
+  locale: 'hi-IN',
+  numberingSystem: 'deva',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSpacing: '2', // For lakh/crore system
+}
+
+/**
+ * Chinese (Simplified) format options
+ */
+export const chineseCN: NumbersConfig = {
+  locale: 'zh-CN',
+  useGrouping: true,
+  decimalPlaces: 2,
+}
+
+/**
+ * Chinese (Simplified) format options with currency
+ */
+export const chineseCNWithCurrency: NumbersConfig = {
+  locale: 'zh-CN',
+  useGrouping: true,
+  decimalPlaces: 2,
+  currencySymbol: '¥',
+  currencySymbolPlacement: 'p',
+}
+
+/**
+ * Japanese format options
+ */
+export const japaneseJP: NumbersConfig = {
+  locale: 'ja-JP',
+  useGrouping: true,
+  decimalPlaces: 0,
+  currencySymbol: '¥',
+  currencySymbolPlacement: 'p',
+}
+
+/**
+ * Indian format options (using lakh/crore system)
+ */
+export const indianIN: NumbersConfig = {
+  locale: 'en-IN',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSpacing: '2',
+}
+
+/**
+ * Swiss format options (with apostrophe separators)
+ */
+export const swissCH: NumbersConfig = {
+  locale: 'de-CH',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSeparator: '\'',
+  decimalCharacter: '.',
+}
+
+/**
+ * Swedish format options (space as separator)
+ */
+export const swedishSE: NumbersConfig = {
+  locale: 'sv-SE',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSeparator: ' ',
+  decimalCharacter: ',',
+}
+
+/**
+ * French format options (space as separator, comma for decimal)
+ */
+export const frenchFR: NumbersConfig = {
+  locale: 'fr-FR',
+  useGrouping: true,
+  decimalPlaces: 2,
+  digitGroupSeparator: ' ',
+  decimalCharacter: ',',
+}
+
+/**
  * US Phone Number format: (123) 456-7890
  */
 export const phoneUS: NumbersConfig = {
@@ -326,6 +435,26 @@ export const creditCard: NumbersConfig = {
   minimumValue: '0',
   digitGroupSeparator: ' ',
   digitGroupSpacing: '4',
+}
+
+/**
+ * Hebrew (Israel) format options for RTL formatting
+ */
+export const hebrewIL: NumbersConfig = {
+  locale: 'he-IL',
+  useGrouping: true,
+  decimalPlaces: 2,
+}
+
+/**
+ * Hebrew (Israel) format options for RTL formatting with currency
+ */
+export const hebrewILWithCurrency: NumbersConfig = {
+  locale: 'he-IL',
+  useGrouping: true,
+  decimalPlaces: 2,
+  currencySymbol: '₪',
+  currencySymbolPlacement: 's',
 }
 
 /**

@@ -10,24 +10,38 @@ export { Numbers } from './numbers'
 
 // Presets
 export {
+  // Internationalization formats
+  arabicEG,
+  arabicSA,
+
+  chineseCN,
+  chineseCNWithCurrency,
+
   // Utility
   createUnitConverter,
   // Credit Card
   creditCard,
-
+  frenchFR,
+  hebrewIL,
+  hebrewILWithCurrency,
+  hindiIN,
+  indianIN,
   // IP Address
   ipAddress,
+  japaneseJP,
   lengthCm,
-
   lengthFeet,
+
   // Lengths
   lengthMeters,
   // Percentage
   percentageFormat,
-
   phoneInternational,
   // Phone numbers
   phoneUS,
+
+  swedishSE,
+  swissCH,
   // Temperatures
   tempCelsius,
 
