@@ -4,64 +4,181 @@ _This is just an example of the ts-numbers docs._
 
 The Reverse Proxy can be configured using a `reverse-proxy.config.ts` _(or `reverse-proxy.config.js`)_ file and it will be automatically loaded when running the `reverse-proxy` command.
 
+ts-numbers can be configured using a `numbers.config.ts` (or `numbers.config.js`) file to set default configuration options for your entire application.
+
+## Global Configuration
+
+Create a configuration file in your project root:
+
 ```ts
-// reverse-proxy.config.{ts,js}
-import type { ReverseProxyOptions } from '@stacksjs/rpx'
-import os from 'node:os'
-import path from 'node:path'
+// numbers.config.ts
+import type { NumbersConfig } from 'ts-numbers'
 
-const config: ReverseProxyOptions = {
+const config: NumbersConfig = {
   /**
-   * The from URL to proxy from.
-   * Default: localhost:5173
+   * Core formatting options
    */
-  from: 'localhost:5173',
-
-  /**
-   * The to URL to proxy to.
-   * Default: stacks.localhost
-   */
-  to: 'stacks.localhost',
+  decimalPlaces: 2,
+  decimalCharacter: '.',
+  digitGroupSeparator: ',',
 
   /**
-   * The HTTPS settings.
-   * Default: true
-   * If set to false, the proxy will use HTTP.
-   * If set to true, the proxy will use HTTPS.
-   * If set to an object, the proxy will use HTTPS with the provided settings.
+   * Currency options
    */
-  https: {
-    domain: 'stacks.localhost',
-    hostCertCN: 'stacks.localhost',
-    caCertPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.ca.crt`),
-    certPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt`),
-    keyPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt.key`),
-    altNameIPs: ['127.0.0.1'],
-    altNameURIs: ['localhost'],
-    organizationName: 'stacksjs.org',
-    countryName: 'US',
-    stateName: 'California',
-    localityName: 'Playa Vista',
-    commonName: 'stacks.localhost',
-    validityDays: 180,
-    verbose: false,
-  },
+  currencySymbol: '$',
+  currencySymbolPlacement: 'p',
 
   /**
-   * The verbose setting.
-   * Default: false
-   * If set to true, the proxy will log more information.
+   * Number constraints
    */
+  minimumValue: undefined,
+  maximumValue: undefined,
+
+  /**
+   * Decimal behavior
+   */
+  allowDecimalPadding: true,
+  alwaysAllowDecimalCharacter: false,
+
+  /**
+   * Display and interaction
+   */
+  caretPositionOnFocus: null,
+  emptyInputBehavior: 'focus',
+  leadingZero: 'deny',
+  negativePositiveSignPlacement: 'l',
+
+  /**
+   * Interaction options
+   */
+  selectOnFocus: false,
+  readOnly: false,
+  modifyValueOnWheel: false,
+
+  /**
+   * Miscellaneous
+   */
+  roundingMethod: 'S',
   verbose: false,
 }
 
 export default config
 ```
 
-_Then run:_
+Then import and use it in your application:
 
-```bash
-./rpx start
+```ts
+import { Numbers } from 'ts-numbers'
+import numbersConfig from './numbers.config'
+
+// Create a new instance with global config
+const myInput = new Numbers('#my-input', {
+  ...numbersConfig,
+  // Override specific options as needed
+  decimalPlaces: 4,
+})
 ```
 
-To learn more, head over to the [documentation](https://reverse-proxy.sh/).
+## Configuration Options
+
+ts-numbers provides a wide range of configuration options. Here are the most common ones:
+
+### Basic Formatting
+
+```ts
+{
+  // Number of decimal places to display
+  decimalPlaces: 2,
+
+  // Character used for the decimal separator
+  decimalCharacter: '.',
+
+  // Alternative decimal character (e.g., comma for European formats)
+  decimalCharacterAlternative: null,
+
+  // Character used for thousands separator
+  digitGroupSeparator: ',',
+
+  // Number of digits between separators
+  digitGroupSpacing: 3,
+}
+```
+
+### Currency Formatting
+
+```ts
+{
+  // Currency symbol to display
+  currencySymbol: '$',
+
+  // Placement of currency symbol: 'p' (prefix) or 's' (suffix)
+  currencySymbolPlacement: 'p',
+}
+```
+
+### Number Constraints
+
+```ts
+{
+  // Minimum allowed value
+  minimumValue: '0',
+
+  // Maximum allowed value
+  maximumValue: '1000',
+
+  // Behavior when value exceeds min/max limits
+  // Options: 'ceiling', 'floor', 'ignore', 'invalid'
+  overrideMinMaxLimits: 'ceiling',
+}
+```
+
+### Input Behavior
+
+```ts
+{
+  // Select entire value on focus
+  selectOnFocus: true,
+
+  // Where to position cursor on focus
+  // Options: 'start', 'end', 'decimalChar', null
+  caretPositionOnFocus: 'end',
+
+  // Behavior when input is empty
+  // Options: 'focus', 'press', 'always', 'min', 'max', 'zero', 'null'
+  emptyInputBehavior: 'zero',
+}
+```
+
+### Specialized Types
+
+```ts
+{
+  // Type of specialized formatting
+  // Options: 'phone', 'temperature', 'weight', 'length', 'time', 'ip', 'creditCard', 'percentage'
+  isSpecializedType: 'phone',
+
+  // Options for the specialized type
+  specializedOptions: {
+    // For phone numbers
+    phoneFormat: '(###) ###-####',
+    countryCode: 'US',
+
+    // For temperature
+    temperatureUnit: 'C',
+    convertTempTo: 'F',
+  },
+}
+```
+
+## Loading from File
+
+The library will automatically load configuration from `numbers.config.ts` or `numbers.config.js` if present in your project root. You can also explicitly load a configuration file:
+
+```ts
+import { loadConfig } from 'ts-numbers'
+
+// Load from a specific path
+loadConfig('./path/to/custom-config.js')
+```
+
+To learn more about all available configuration options, refer to the [API Reference](/api-reference).

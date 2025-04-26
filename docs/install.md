@@ -1,8 +1,6 @@
-# Install
+# Installation
 
-_This is just an example of the ts-numbers docs._
-
-Installing `rpx` is easy. Simply pull it in via your package manager of choice, or download the binary directly.
+Installing ts-numbers is easy and straightforward with multiple package manager options.
 
 ## Package Managers
 
@@ -11,108 +9,114 @@ Choose your package manager of choice:
 ::: code-group
 
 ```sh [npm]
-npm install --save-dev @stacksjs/rpx
-# npm i -d @stacksjs/rpx
-
-# or, install globally via
-npm i -g @stacksjs/rpx
+npm install ts-numbers
+# or with --save flag
+npm install --save ts-numbers
 ```
 
 ```sh [bun]
-bun install --dev @stacksjs/rpx
-# bun add --dev @stacksjs/rpx
-# bun i -d @stacksjs/rpx
-
-# or, install globally via
-bun add --global @stacksjs/rpx
+bun install ts-numbers
+# or shorthand
+bun add ts-numbers
 ```
 
 ```sh [pnpm]
-pnpm add --save-dev @stacksjs/rpx
-# pnpm i -d @stacksjs/rpx
-
-# or, install globally via
-pnpm add --global @stacksjs/rpx
+pnpm add ts-numbers
 ```
 
 ```sh [yarn]
-yarn add --dev @stacksjs/rpx
-# yarn i -d @stacksjs/rpx
-
-# or, install globally via
-yarn global add @stacksjs/rpx
-```
-
-```sh [brew]
-brew install rpx # coming soon
-```
-
-```sh [pkgx]
-pkgx rpx # coming soon
+yarn add ts-numbers
 ```
 
 :::
 
-Read more about how to use it in the Usage section of the documentation.
+## TypeScript Configuration
 
-## Binaries
+ts-numbers is built with TypeScript and includes complete type definitions. No additional packages are needed for TypeScript support.
 
-Choose the binary that matches your platform and architecture:
+Make sure your `tsconfig.json` includes the following settings for the best experience:
 
-::: code-group
-
-```sh [macOS (arm64)]
-# Download the binary
-curl -L https://github.com/stacksjs/rpx/releases/download/v0.9.1/rpx-darwin-arm64 -o rpx
-
-# Make it executable
-chmod +x rpx
-
-# Move it to your PATH
-mv rpx /usr/local/bin/rpx
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020", // Or higher
+    "module": "ESNext", // For ES modules
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true // Recommended for type safety
+  }
+}
 ```
 
-```sh [macOS (x64)]
-# Download the binary
-curl -L https://github.com/stacksjs/rpx/releases/download/v0.9.1/rpx-darwin-x64 -o rpx
+## Usage with Bundlers
 
-# Make it executable
-chmod +x rpx
+ts-numbers works with all popular bundlers:
 
-# Move it to your PATH
-mv rpx /usr/local/bin/rpx
+### Webpack
+
+```js
+// No special configuration needed
+import { Numbers } from 'ts-numbers'
 ```
 
-```sh [Linux (arm64)]
-# Download the binary
-curl -L https://github.com/stacksjs/rpx/releases/download/v0.9.1/rpx-linux-arm64 -o rpx
+### Vite
 
-# Make it executable
-chmod +x rpx
-
-# Move it to your PATH
-mv rpx /usr/local/bin/rpx
+```js
+// Works out of the box with Vite
+import { Numbers } from 'ts-numbers'
 ```
 
-```sh [Linux (x64)]
-# Download the binary
-curl -L https://github.com/stacksjs/rpx/releases/download/v0.9.1/rpx-linux-x64 -o rpx
+### Rollup
 
-# Make it executable
-chmod +x rpx
-
-# Move it to your PATH
-mv rpx /usr/local/bin/rpx
+```js
+// Works with standard Rollup configuration
+import { Numbers } from 'ts-numbers'
 ```
 
-```sh [Windows (x64)]
-# Download the binary
-curl -L https://github.com/stacksjs/rpx/releases/download/v0.9.1/rpx-windows-x64.exe -o rpx.exe
+## CDN Usage
 
-# Move it to your PATH (adjust the path as needed)
-move rpx.exe C:\Windows\System32\rpx.exe
+You can also use ts-numbers directly from a CDN:
+
+```html
+<!-- ESM version -->
+<script type="module">
+  import { Numbers } from 'https://cdn.jsdelivr.net/npm/ts-numbers/dist/index.js'
+
+  // Use ts-numbers
+  const formatter = new Numbers('#my-input', {
+    currencySymbol: '$',
+    decimalPlaces: 2
+  })
+</script>
 ```
 
-::: tip
-You can also find the `rpx` binaries in GitHub [releases](https://github.com/stacksjs/rpx/releases).
-:::
+```html
+<!-- UMD version (global TSNumbers object) -->
+<script src="https://cdn.jsdelivr.net/npm/ts-numbers/dist/umd/ts-numbers.js"></script>
+<script>
+  const formatter = new TSNumbers.Numbers('#my-input', {
+    currencySymbol: '$',
+    decimalPlaces: 2
+  })
+</script>
+```
+
+## Basic Example
+
+After installation, you can use ts-numbers in your project:
+
+```js
+import { Numbers } from 'ts-numbers'
+
+// Create a formatter
+const price = new Numbers('#price-input', {
+  currencySymbol: '$',
+  decimalPlaces: 2,
+  digitGroupSeparator: ',',
+})
+
+// Set a value
+price.set(1234.56) // Displays as "$1,234.56"
+```
+
+Now that you've installed ts-numbers, proceed to the [Usage Guide](/usage) to learn more about how to use it effectively.

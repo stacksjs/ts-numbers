@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "ts-numbers"
-  text: "For a better local environment."
-  tagline: "Modern and smart reverse proxy."
+  text: "Powerful number formatting"
+  tagline: "A lightweight library for formatting and parsing numbers with advanced features"
   image: /images/logo-white.png
   actions:
     - theme: brand
@@ -13,21 +13,24 @@ hero:
       link: /intro
     - theme: alt
       text: View on GitHub
-      link: https://github.com/stacksjs/rpx
+      link: https://github.com/stacksjs/ts-numbers
 
 features:
-  - title: "Minimal Starter Kit"
-    icon: "🔀"
-    details: "Bootstrap your next TypeScript project."
-  - title: "Documentation"
-    icon: "📚"
-    details: "Easily document your idea/package/library."
-  - title: "CLI"
-    icon: "🛠"
-    details: "Build your own CLI."
-  - title: "Binary"
-    icon: "🚀"
-    details: "Automatically builds a binary for your project out of your CLI."
+  - title: "Number Formatting"
+    icon: "🔢"
+    details: "Format numbers with precise control over decimal places, grouping, and more."
+  - title: "Currency Support"
+    icon: "💰"
+    details: "Format monetary values with built-in currency symbols and international support."
+  - title: "Specialized Formats"
+    icon: "📱"
+    details: "Phone numbers, time, temperature, IP addresses, and more specialized formatting."
+  - title: "Input Events"
+    icon: "⌨️"
+    details: "Handle user input with automatic formatting, validation, and constraints."
+  - title: "Internationalization"
+    icon: "🌎"
+    details: "Support for different locales, numbering systems, and RTL text."
 ---
 
 <Home />

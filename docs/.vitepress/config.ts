@@ -12,7 +12,7 @@ const analyticsHead: HeadConfig[] = [
     'script',
     {
       'src': 'https://cdn.usefathom.com/script.js',
-      'data-site': 'DCOEHMGA',
+      'data-site': 'SZRKMTEX',
       'defer': '',
     },
   ],
@@ -60,10 +60,31 @@ const sidebar = [
       { text: 'Config', link: '/config' },
     ],
   },
+  {
+    text: 'Features',
+    items: [
+      { text: 'Core Formatting', link: '/features/core-formatting' },
+      { text: 'Currency Support', link: '/features/currency-support' },
+      { text: 'Specialized Formats', link: '/features/specialized-formats' },
+      { text: 'Input Events', link: '/features/input-events' },
+      { text: 'Internationalization', link: '/features/internationalization' },
+    ],
+  },
+  {
+    text: 'Advanced',
+    items: [
+      { text: 'Presets', link: '/advanced/presets' },
+      { text: 'Scientific Notation', link: '/advanced/scientific-notation' },
+      { text: 'Unit Conversion', link: '/advanced/unit-conversion' },
+      { text: 'Extended Persistence', link: '/advanced/extended-persistence' },
+      { text: 'Style Rules', link: '/advanced/style-rules' },
+    ],
+  },
+  { text: 'API Reference', link: '/api-reference' },
   { text: 'Showcase', link: '/Showcase' },
 ]
-const description = 'A TypeScript Starter Kit. For a better Development Experience.'
-const title = 'ts-numbers | A TypeScript Starter Kit. For a better Development Experience.'
+const description = 'A powerful yet lightweight library for formatting and parsing numbers.'
+const title = 'ts-numbers | A powerful yet lightweight library for formatting and parsing numbers.'
 
 export default withPwa(
   defineConfig({
@@ -83,7 +104,7 @@ export default withPwa(
       ['meta', { name: 'author', content: 'Stacks.js, Inc.' }],
       ['meta', {
         name: 'tags',
-        content: 'ts-numbers, stacksjs, reverse proxy, modern, lightweight, zero-config, local development',
+        content: 'ts-numbers, stacksjs, number formatting, currency formatting, internationalization, typescript',
       }],
 
       ['meta', { property: 'og:type', content: 'website' }],
@@ -93,7 +114,7 @@ export default withPwa(
 
       ['meta', { property: 'og:site_name', content: 'ts-numbers' }],
       ['meta', { property: 'og:image', content: './images/og-image.jpg' }],
-      ['meta', { property: 'og:url', content: 'https://reverse-proxy.sh/' }],
+      ['meta', { property: 'og:url', content: 'https://ts-numbers.stacksjs.org/' }],
       // ['script', { 'src': 'https://cdn.usefathom.com/script.js', 'data-site': '', 'data-spa': 'auto', 'defer': '' }],
       ...analyticsHead,
     ],
@@ -111,7 +132,7 @@ export default withPwa(
       sidebar,
 
       editLink: {
-        pattern: 'https://github.com/stacksjs/stacks/edit/main/docs/docs/:path',
+        pattern: 'https://github.com/stacksjs/ts-numbers/edit/main/docs/:path',
         text: 'Edit this page on GitHub',
       },
 

@@ -1,8 +1,51 @@
-<p align="center"><img src="https://github.com/stacksjs/rpx/blob/main/.github/art/cover.jpg?raw=true" alt="Social Card of this repo"></p>
+# Introduction to ts-numbers
 
-# ts-numbers
+<p align="center"><img src="https://github.com/stacksjs/ts-numbers/blob/main/.github/art/cover.jpg?raw=true" alt="Social Card of ts-numbers"></p>
 
-This is an opinionated TypeScript Starter kit to help kick-start development of your next Bun package.
+ts-numbers is a powerful yet lightweight TypeScript library for formatting and parsing numbers with support for currencies, specialized formats, and internationalization.
+
+## Key Features
+
+- **Versatile Number Formatting**: Control decimal places, separators, rounding methods, and more
+- **Currency Support**: Format monetary values with proper currency symbols and international formats
+- **Specialized Types**: Format phone numbers, IP addresses, time, temperature, and more
+- **Input Handling**: Comprehensive event handling for user input with automatic formatting
+- **Internationalization**: Support for different locales, numbering systems, and RTL text
+- **Unit Conversion**: Built-in conversion for temperature, weight, length, and other measurements
+- **Scientific Notation**: Format very large or small numbers with scientific notation
+- **Advanced Features**: Presets, extended persistence, style rules, and more
+
+## Why ts-numbers?
+
+ts-numbers is designed to solve the complex problem of number formatting and input handling in web applications. It provides a consistent and powerful API for handling numeric values with the following benefits:
+
+- **Type Safety**: Built from the ground up with TypeScript for excellent type safety
+- **Lightweight**: Small bundle size with no external dependencies
+- **Comprehensive**: Handles a wide range of number formatting needs
+- **Flexible**: Works with any HTML input element or element that can display text
+- **Extensible**: Easy to customize and extend with your own formatting rules
+- **Well-tested**: Extensive test coverage for reliability
+
+## Quick Example
+
+```typescript
+import { Numbers } from 'ts-numbers'
+
+// Basic currency formatting
+const price = new Numbers('#price-input', {
+  currencySymbol: '$',
+  decimalPlaces: 2,
+  digitGroupSeparator: ',',
+})
+
+// Set a value programmatically
+price.set(1234.56) // Displays as "$1,234.56"
+
+// Get the raw numeric value
+const value = price.getNumber() // 1234.56
+```
+
+Ready to get started? Check out the [Installation](/install) guide next.
 
 ## Get Started
 
