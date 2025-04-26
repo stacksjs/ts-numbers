@@ -1,4 +1,4 @@
-import type { FormatNumberOptions, NumbersConfig, ParseNumberOptions } from './types'
+import type { NumbersConfig } from './types'
 import { formatNumber, parseNumber } from './format'
 
 /**

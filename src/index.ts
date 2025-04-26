@@ -13,6 +13,14 @@ export {
 // Main class
 export { Numbers } from './numbers'
 
+// Performance utilities
+export {
+  bulkFormat,
+  bulkParse,
+  generateLargeNumbers,
+  measureFormatPerformance,
+  measureParsePerformance,
+} from './performance'
 // Presets
 export {
   // Internationalization formats
@@ -63,6 +71,7 @@ export {
 
   weightLbs,
 } from './presets'
+
 export {
   formatCreditCard,
   formatIPAddress,
@@ -72,15 +81,6 @@ export {
   formatTime,
   formatWeight,
 } from './specialized-formatter'
-
-// Performance utilities
-export {
-  bulkFormat,
-  bulkParse,
-  generateLargeNumbers,
-  measureFormatPerformance,
-  measureParsePerformance,
-} from './performance'
 
 export type {
   CurrencyConfig,
