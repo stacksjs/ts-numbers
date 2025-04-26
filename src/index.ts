@@ -5,6 +5,11 @@ export { config, defaultConfig } from './config'
 
 // Utility functions
 export { formatNumber, parseNumber, roundNumber } from './format'
+export {
+  applyFormatPattern,
+  applyPredefinedPattern,
+  formatPatterns,
+} from './format-patterns'
 // Main class
 export { Numbers } from './numbers'
 

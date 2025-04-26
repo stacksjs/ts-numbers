@@ -141,6 +141,22 @@ export function formatNumber({ value, config = {} }: FormatNumberOptions): strin
     return formatSpecializedNumber(value, mergedConfig)
   }
 
+  // Handle negativeBracketsTypeOnBlur option for accounting format
+  if (mergedConfig.negativeBracketsTypeOnBlur) {
+    const numValue = typeof value === 'string' ? Number.parseFloat(value) : value
+    if (Number.isFinite(numValue) && numValue < 0) {
+      // Format the absolute value
+      const absValue = Math.abs(numValue)
+      const formatted = formatNumber({ value: absValue, config: { ...mergedConfig, negativeBracketsTypeOnBlur: null } })
+
+      // Apply brackets based on the configuration
+      const brackets = mergedConfig.negativeBracketsTypeOnBlur.split(',')
+      if (brackets.length === 2) {
+        return `${brackets[0]}${formatted}${brackets[1]}`
+      }
+    }
+  }
+
   // Special handling for digitGroupSpacing: '2' in tests
   if (mergedConfig.digitGroupSpacing === '2' && Object.keys(config).length === 1 && 'digitGroupSpacing' in config) {
     // Special case for the test that expects format: 12,34,56,7.89
@@ -419,6 +435,7 @@ function formatManually(value: number, config: NumbersConfig): string {
     positiveSignCharacter = '+',
     roundingMethod = 'S',
     allowDecimalPadding = true,
+    negativeBracketsTypeOnBlur = null,
   } = config
 
   // First round the number according to the rounding method
@@ -500,8 +517,20 @@ function formatManually(value: number, config: NumbersConfig): string {
     formattedValue = integerPart
   }
 
-  // Add sign if needed
-  if (roundedValue < 0) {
+  // Handle accounting formatting with brackets for negative numbers
+  if (negativeBracketsTypeOnBlur && roundedValue < 0) {
+    const brackets = negativeBracketsTypeOnBlur.split(',')
+    if (brackets.length === 2) {
+      // Apply brackets to negative number
+      formattedValue = `${brackets[0]}${formattedValue.replace(negativeSignCharacter, '')}${brackets[1]}`
+    }
+    else {
+      // Fall back to regular sign
+      formattedValue = `${negativeSignCharacter}${formattedValue.replace(negativeSignCharacter, '')}`
+    }
+  }
+  else if (roundedValue < 0) {
+    // Regular negative sign if not using brackets
     formattedValue = `${negativeSignCharacter}${formattedValue}`
   }
   else if (showPositiveSign === true) {
@@ -545,6 +574,7 @@ function formatWithoutDecimal(value: number, integerPart: string, config: Number
     showPositiveSign = false,
     negativeSignCharacter = '-',
     positiveSignCharacter = '+',
+    negativeBracketsTypeOnBlur = null,
   } = config
 
   // Format the integer part with group separators
@@ -585,9 +615,18 @@ function formatWithoutDecimal(value: number, integerPart: string, config: Number
     }
   }
 
-  // Add sign if needed
+  // Handle accounting formatting with brackets for negative numbers
   let formattedValue = integerPart
-  if (value < 0) {
+  if (negativeBracketsTypeOnBlur && value < 0) {
+    const brackets = negativeBracketsTypeOnBlur.split(',')
+    if (brackets.length === 2) {
+      formattedValue = `${brackets[0]}${formattedValue}${brackets[1]}`
+    }
+    else {
+      formattedValue = `${negativeSignCharacter}${formattedValue}`
+    }
+  }
+  else if (value < 0) {
     formattedValue = `${negativeSignCharacter}${formattedValue}`
   }
   else if (showPositiveSign === true) {

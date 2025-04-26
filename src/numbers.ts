@@ -471,11 +471,14 @@ export class Numbers implements NumbersInstance {
     }
 
     // Apply negative brackets if configured
+    // This is already handled by formatNumber, but we keep it here for compatibility
+    // with the existing tests and to ensure correct behavior
     if (this.config.negativeBracketsTypeOnBlur && numValue < 0) {
       const brackets = this.config.negativeBracketsTypeOnBlur.split(',')
       if (brackets.length === 2) {
-        const formattedValue = this.getElementValue().replace(/-/g, '')
-        this.setElementValue(`${brackets[0]}${formattedValue}${brackets[1]}`)
+        // Use the current value, but remove any existing negative sign and add brackets
+        const currentValue = this.getElementValue().replace(this.config.negativeSignCharacter || '-', '')
+        this.setElementValue(`${brackets[0]}${currentValue}${brackets[1]}`)
       }
     }
 

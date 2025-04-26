@@ -121,6 +121,73 @@ export const accounting: NumbersConfig = {
   negativePositiveSignPlacement: null,
   // This would ideally use brackets for negative values
   // but we don't have that option directly in our config type
+  negativeBracketsTypeOnBlur: '(,)',
+  currencySymbolPlacement: 'p',
+  currencySymbol: '$',
+  digitGroupSeparator: ',',
+  decimalCharacter: '.',
+  decimalPlaces: 2,
+  roundingMethod: 'S',
+  showPositiveSign: false,
+  leadingZero: 'keep',
+  // For accounting, we usually want to align numbers in a table/report
+  emptyInputBehavior: 'zero',
+}
+
+// International Accounting Standards (IFRS/GAAP) format
+export const internationalAccounting: NumbersConfig = {
+  negativeBracketsTypeOnBlur: '(,)',
+  currencySymbolPlacement: 'p',
+  currencySymbol: '€',
+  digitGroupSeparator: ' ',
+  decimalCharacter: ',',
+  decimalPlaces: 2,
+  roundingMethod: 'S',
+  showPositiveSign: false,
+  emptyInputBehavior: 'zero',
+  locale: 'fr-FR',
+}
+
+// UK Accounting format
+export const ukAccounting: NumbersConfig = {
+  negativeBracketsTypeOnBlur: '(,)',
+  currencySymbolPlacement: 'p',
+  currencySymbol: '£',
+  digitGroupSeparator: ',',
+  decimalCharacter: '.',
+  decimalPlaces: 2,
+  roundingMethod: 'S',
+  showPositiveSign: false,
+  emptyInputBehavior: 'zero',
+  locale: 'en-GB',
+}
+
+// Australian Accounting format
+export const australianAccounting: NumbersConfig = {
+  negativeBracketsTypeOnBlur: '(,)',
+  currencySymbolPlacement: 'p',
+  currencySymbol: 'AU$',
+  digitGroupSeparator: ',',
+  decimalCharacter: '.',
+  decimalPlaces: 2,
+  roundingMethod: 'S',
+  showPositiveSign: false,
+  emptyInputBehavior: 'zero',
+  locale: 'en-AU',
+}
+
+// Japanese Accounting format
+export const japaneseAccounting: NumbersConfig = {
+  negativeBracketsTypeOnBlur: '(,)',
+  currencySymbolPlacement: 'p',
+  currencySymbol: '¥',
+  digitGroupSeparator: ',',
+  decimalCharacter: '.',
+  decimalPlaces: 0, // Yen typically doesn't use decimal places
+  roundingMethod: 'S',
+  showPositiveSign: false,
+  emptyInputBehavior: 'zero',
+  locale: 'ja-JP',
 }
 
 /**
