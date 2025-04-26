@@ -10,6 +10,7 @@ const config: ESLintConfig = stacks({
   typescript: true,
   jsonc: true,
   yaml: true,
+  markdown: false,
   ignores: [
     'fixtures/**',
   ],
