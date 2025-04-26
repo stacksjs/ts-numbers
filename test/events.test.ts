@@ -1,4 +1,3 @@
-import type { NumbersConfig } from '../src/types'
 import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { Numbers } from '../src/numbers'
 

@@ -1693,6 +1693,7 @@ export class Numbers implements NumbersInstance {
       // Check if Node.js process exists and has test env variables
       || (typeof require === 'function' && (() => {
         try {
+          // eslint-disable-next-line ts/no-require-imports
           const process = require('node:process')
           return process.env?.NODE_ENV === 'test' || process.env?.JEST_WORKER_ID !== undefined
         }

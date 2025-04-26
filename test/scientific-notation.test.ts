@@ -1,7 +1,6 @@
 import type { NumbersConfig } from '../src/types'
 import { describe, expect, it } from 'bun:test'
 import { formatNumber, parseNumber } from '../src'
-import { Numbers } from '../src/numbers'
 
 describe('Scientific Notation', () => {
   describe('Formatting with Scientific Notation', () => {

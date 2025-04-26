@@ -32,7 +32,6 @@ describe('Numbers Class', () => {
   describe('Initialization', () => {
     it('initializes with default config', () => {
       const element = createMockElement()
-      // @ts-ignore - Mock element
       document.querySelector = () => element
 
       const instance = new Numbers('#element')
@@ -47,7 +46,6 @@ describe('Numbers Class', () => {
         currencySymbol: '$',
       }
 
-      // @ts-ignore - Mock element
       const instance = new Numbers(element, config)
       const instanceConfig = instance.getConfig()
 
@@ -56,7 +54,6 @@ describe('Numbers Class', () => {
     })
 
     it('throws error when element not found', () => {
-      // @ts-ignore - Mock element
       document.querySelector = () => null
 
       expect(() => new Numbers('#non-existent')).toThrow('Element #non-existent not found')
@@ -69,7 +66,6 @@ describe('Numbers Class', () => {
 
     beforeEach(() => {
       element = createMockElement('input', '1234.56')
-      // @ts-ignore - Mock element
       instance = new Numbers(element)
     })
 
@@ -103,7 +99,6 @@ describe('Numbers Class', () => {
 
     beforeEach(() => {
       element = createMockElement('input', '1234.56')
-      // @ts-ignore - Mock element
       instance = new Numbers(element)
     })
 
@@ -131,7 +126,6 @@ describe('Numbers Class', () => {
 
     beforeEach(() => {
       element = createMockElement('input', '1234.56')
-      // @ts-ignore - Mock element
       instance = new Numbers(element, {
         currencies: {
           USD: {
@@ -177,7 +171,6 @@ describe('Numbers Class', () => {
 
     beforeEach(() => {
       element = createMockElement('input', '1000')
-      // @ts-ignore - Mock element
       instance = new Numbers(element)
     })
 
@@ -220,9 +213,9 @@ describe('Numbers Class', () => {
       const element1 = createMockElement()
       const element2 = createMockElement()
 
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element1)
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element2)
 
       expect(Numbers.getList().length).toBe(2)
@@ -231,10 +224,7 @@ describe('Numbers Class', () => {
     it('updates all instances', () => {
       const element1 = createMockElement()
       const element2 = createMockElement()
-
-      // @ts-ignore - Mock element
       const instance1 = new Numbers(element1)
-      // @ts-ignore - Mock element
       const instance2 = new Numbers(element2)
 
       Numbers.updateAll({ decimalPlaces: 5 })
@@ -247,9 +237,9 @@ describe('Numbers Class', () => {
       const element1 = createMockElement()
       const element2 = createMockElement()
 
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element1)
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element2)
 
       Numbers.setAll(9999)
@@ -269,9 +259,8 @@ describe('Numbers Class', () => {
         },
       }
 
-      // @ts-ignore - Mock elements
       const instance1 = new Numbers(element1, config)
-      // @ts-ignore - Mock elements
+
       const instance2 = new Numbers(element2, config)
 
       Numbers.setCurrencyAll('EUR')
@@ -284,9 +273,9 @@ describe('Numbers Class', () => {
       const element1 = createMockElement()
       const element2 = createMockElement()
 
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element1)
-      // @ts-ignore - Mock element
+      // eslint-disable-next-line no-new
       new Numbers(element2)
 
       Numbers.removeAll()
@@ -298,7 +287,6 @@ describe('Numbers Class', () => {
   describe('Instance Removal', () => {
     it('removes instance and event listeners', () => {
       const element = createMockElement()
-      // @ts-ignore - Mock element
       const instance = new Numbers(element)
 
       instance.remove()
@@ -312,7 +300,6 @@ describe('Numbers Class', () => {
     it('handles null values based on emptyInputBehavior config', () => {
       const element = createMockElement()
 
-      // @ts-ignore - Mock element
       const instance = new Numbers(element, {
         emptyInputBehavior: 'zero',
       })
@@ -320,7 +307,6 @@ describe('Numbers Class', () => {
       instance.set(null)
       expect(element.value).toContain('0')
 
-      // @ts-ignore - Mock element
       const instance2 = new Numbers(element, {
         emptyInputBehavior: 'null',
       })
@@ -332,7 +318,6 @@ describe('Numbers Class', () => {
     it('handles min/max value limits', () => {
       const element = createMockElement()
 
-      // @ts-ignore - Mock element
       const instance = new Numbers(element, {
         minimumValue: '10',
         maximumValue: '100',
@@ -349,7 +334,6 @@ describe('Numbers Class', () => {
     it('handles valuesToStrings mapping', () => {
       const element = createMockElement()
 
-      // @ts-ignore - Mock element
       const instance = new Numbers(element, {
         valuesToStrings: {
           '0': 'Zero',

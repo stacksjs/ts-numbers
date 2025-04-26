@@ -25,7 +25,7 @@ describe('Extended Persistence Features', () => {
         length: 0,
       },
       writable: true,
-      configurable: true
+      configurable: true,
     })
 
     // Mock sessionStorage
@@ -39,7 +39,7 @@ describe('Extended Persistence Features', () => {
         length: 0,
       },
       writable: true,
-      configurable: true
+      configurable: true,
     })
 
     // Mock document.cookie

@@ -1,5 +1,5 @@
 import type { NumbersConfig } from '../src/types'
-import { afterAll, afterEach, beforeEach, describe, expect, it, jest, mock } from 'bun:test'
+import { afterAll, afterEach, beforeEach, describe, expect, it, mock } from 'bun:test'
 
 // Now import the Numbers class
 import { Numbers } from '../src/numbers'
