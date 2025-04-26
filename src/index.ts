@@ -73,6 +73,15 @@ export {
   formatWeight,
 } from './specialized-formatter'
 
+// Performance utilities
+export {
+  bulkFormat,
+  bulkParse,
+  generateLargeNumbers,
+  measureFormatPerformance,
+  measureParsePerformance,
+} from './performance'
+
 export type {
   CurrencyConfig,
   FormatNumberOptions,
