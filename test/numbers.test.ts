@@ -1,5 +1,11 @@
+import type { NumbersConfig } from '../src/types'
 import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { Numbers } from '../src/numbers'
+
+// Define a custom interface that extends HTMLElement with the properties we need
+interface MockHTMLElement extends HTMLElement {
+  value: string
+}
 
 // Mock document object
 function createMockElement(tagName = 'input', value = '', textContent = '') {
@@ -24,7 +30,7 @@ function createMockElement(tagName = 'input', value = '', textContent = '') {
     parentNode: {
       insertBefore: mock(),
     },
-  }
+  } as unknown as MockHTMLElement
   return element
 }
 
@@ -91,6 +97,14 @@ describe('Numbers Class', () => {
     it('gets the value as a number', () => {
       expect(instance.getNumber()).toBe(1234.56)
     })
+
+    it('sets a value', () => {
+      const element = createMockElement()
+      const instance = new Numbers(element)
+
+      instance.set(1234.56)
+      expect(element.value).toContain('1,234.56')
+    })
   })
 
   describe('Configuration', () => {
@@ -130,7 +144,7 @@ describe('Numbers Class', () => {
         currencies: {
           USD: {
             symbol: '$',
-            placement: 'p',
+            placement: 'p' as const,
             decimalPlaces: 2,
             locale: 'en-US',
             groupSeparator: ',',
@@ -138,7 +152,7 @@ describe('Numbers Class', () => {
           },
           EUR: {
             symbol: '€',
-            placement: 's',
+            placement: 's' as const,
             decimalPlaces: 2,
             locale: 'de-DE',
             groupSeparator: '.',
@@ -252,7 +266,7 @@ describe('Numbers Class', () => {
       const element1 = createMockElement()
       const element2 = createMockElement()
 
-      const config = {
+      const config: NumbersConfig = {
         currencies: {
           USD: { symbol: '$', placement: 'p', decimalPlaces: 2, locale: 'en-US' },
           EUR: { symbol: '€', placement: 's', decimalPlaces: 2, locale: 'de-DE' },
@@ -302,16 +316,16 @@ describe('Numbers Class', () => {
 
       const instance = new Numbers(element, {
         emptyInputBehavior: 'zero',
-      })
+      } as NumbersConfig)
 
-      instance.set(null)
+      instance.set(null as any)
       expect(element.value).toContain('0')
 
       const instance2 = new Numbers(element, {
         emptyInputBehavior: 'null',
-      })
+      } as NumbersConfig)
 
-      instance2.set(null)
+      instance2.set(null as any)
       expect(element.value).toBe('')
     })
 

@@ -1,9 +1,54 @@
 import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { Numbers } from '../src/numbers'
 
+// Define interfaces for mock events
+interface MockKeyboardEvent extends Partial<KeyboardEvent> {
+  key: string
+  preventDefault: ReturnType<typeof mock>
+  stopPropagation: ReturnType<typeof mock>
+  altKey: boolean
+  shiftKey: boolean
+  ctrlKey: boolean
+}
+
+interface MockWheelEvent extends Partial<WheelEvent> {
+  deltaY: number
+  preventDefault: ReturnType<typeof mock>
+}
+
+interface MockFocusEvent extends Partial<FocusEvent> {
+  preventDefault: ReturnType<typeof mock>
+}
+
+// Define a custom interface for the mock element
+interface MockHTMLElement {
+  tagName: string
+  value: string
+  textContent: string
+  classList: {
+    add: ReturnType<typeof mock>
+    remove: ReturnType<typeof mock>
+    contains: () => boolean
+  }
+  style: Record<string, any>
+  dispatchEvent: ReturnType<typeof mock>
+  addEventListener: ReturnType<typeof mock>
+  removeEventListener: ReturnType<typeof mock>
+  hasAttribute: () => boolean
+  getAttribute: () => any
+  setAttribute: ReturnType<typeof mock>
+  setSelectionRange: ReturnType<typeof mock>
+  select: ReturnType<typeof mock>
+  selectionStart: number
+  nextSibling: any
+  parentNode: {
+    insertBefore: ReturnType<typeof mock>
+  }
+}
+
 // Mock document object and events
-function createMockElement(tagName = 'input', value = '') {
-  const element = {
+function createMockElement(tagName = 'input', value = ''): MockHTMLElement {
+  const element: MockHTMLElement = {
     tagName,
     value,
     textContent: value,
@@ -30,7 +75,7 @@ function createMockElement(tagName = 'input', value = '') {
   return element
 }
 
-function createKeyboardEvent(key: string, options = {}) {
+function createKeyboardEvent(key: string, options = {}): MockKeyboardEvent {
   return {
     key,
     preventDefault: mock(),
@@ -42,14 +87,14 @@ function createKeyboardEvent(key: string, options = {}) {
   }
 }
 
-function createWheelEvent(deltaY: number) {
+function createWheelEvent(deltaY: number): MockWheelEvent {
   return {
     deltaY,
     preventDefault: mock(),
   }
 }
 
-function createFocusEvent() {
+function createFocusEvent(): MockFocusEvent {
   return {
     preventDefault: mock(),
   }
@@ -57,13 +102,12 @@ function createFocusEvent() {
 
 describe('Numbers Event Handling', () => {
   describe('Keyboard Events', () => {
-    let element: any
+    let element: MockHTMLElement
     let instance: Numbers
 
     beforeEach(() => {
       element = createMockElement('input', '1000')
-      // @ts-expect-error Mock element
-      instance = new Numbers(element)
+      instance = new Numbers(element as unknown as HTMLElement)
 
       // Mock document.activeElement
       Object.defineProperty(document, 'activeElement', {
@@ -74,18 +118,17 @@ describe('Numbers Event Handling', () => {
 
     it('handles arrow up/down for incrementing/decrementing', () => {
       // Access the private handleKeydown method
-      // @ts-expect-error Accessing private method
-      const handleKeydown = instance.handleKeydown.bind(instance)
+      const handleKeydown = (instance as any).handleKeydown.bind(instance)
 
       // Test arrow up (increment)
       const arrowUpEvent = createKeyboardEvent('ArrowUp')
-      handleKeydown(arrowUpEvent)
+      handleKeydown(arrowUpEvent as unknown as KeyboardEvent)
       expect(arrowUpEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,100.00')
 
       // Test arrow down (decrement)
       const arrowDownEvent = createKeyboardEvent('ArrowDown')
-      handleKeydown(arrowDownEvent)
+      handleKeydown(arrowDownEvent as unknown as KeyboardEvent)
       expect(arrowDownEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,000.00')
     })
@@ -94,11 +137,10 @@ describe('Numbers Event Handling', () => {
       // Set up history for cancellation testing
       instance.set(2000)
 
-      // @ts-expect-error Accessing private method
-      const handleKeydown = instance.handleKeydown.bind(instance)
+      const handleKeydown = (instance as any).handleKeydown.bind(instance)
 
       const escapeEvent = createKeyboardEvent('Escape')
-      handleKeydown(escapeEvent)
+      handleKeydown(escapeEvent as unknown as KeyboardEvent)
       expect(escapeEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,000') // Should revert to initial value
     })
@@ -112,24 +154,23 @@ describe('Numbers Event Handling', () => {
         },
       })
 
-      // @ts-expect-error Accessing private method
-      const handleKeyboardShortcuts = instance.handleKeyboardShortcuts.bind(instance)
+      const handleKeyboardShortcuts = (instance as any).handleKeyboardShortcuts.bind(instance)
 
       // Test Alt+ArrowUp (increment)
       const incrementEvent = createKeyboardEvent('ArrowUp', { altKey: true })
-      handleKeyboardShortcuts(incrementEvent)
+      handleKeyboardShortcuts(incrementEvent as unknown as KeyboardEvent)
       expect(incrementEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,001')
 
       // Test Alt+ArrowDown (decrement)
       const decrementEvent = createKeyboardEvent('ArrowDown', { altKey: true })
-      handleKeyboardShortcuts(decrementEvent)
+      handleKeyboardShortcuts(decrementEvent as unknown as KeyboardEvent)
       expect(decrementEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,000')
 
       // Test Alt+- (toggle sign)
       const toggleSignEvent = createKeyboardEvent('-', { altKey: true })
-      handleKeyboardShortcuts(toggleSignEvent)
+      handleKeyboardShortcuts(toggleSignEvent as unknown as KeyboardEvent)
       expect(toggleSignEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('-1,000')
     })
@@ -139,29 +180,27 @@ describe('Numbers Event Handling', () => {
         negativePositiveSignBehavior: true,
       })
 
-      // @ts-expect-error Accessing private method
-      const handleKeydown = instance.handleKeydown.bind(instance)
+      const handleKeydown = (instance as any).handleKeydown.bind(instance)
 
       const minusKeyEvent = createKeyboardEvent('-')
-      handleKeydown(minusKeyEvent)
+      handleKeydown(minusKeyEvent as unknown as KeyboardEvent)
       expect(minusKeyEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('-1,000')
 
       const plusKeyEvent = createKeyboardEvent('+')
-      handleKeydown(plusKeyEvent)
+      handleKeydown(plusKeyEvent as unknown as KeyboardEvent)
       expect(plusKeyEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,000')
     })
   })
 
   describe('Wheel Events', () => {
-    let element: any
+    let element: MockHTMLElement
     let instance: Numbers
 
     beforeEach(() => {
       element = createMockElement('input', '1000')
-      // @ts-expect-error Mock element
-      instance = new Numbers(element, {
+      instance = new Numbers(element as unknown as HTMLElement, {
         modifyValueOnWheel: true,
         wheelOn: 'focus',
       })
@@ -174,21 +213,19 @@ describe('Numbers Event Handling', () => {
     })
 
     it('increments value on wheel up', () => {
-      // @ts-expect-error Accessing private method
-      const handleWheel = instance.handleWheel.bind(instance)
+      const handleWheel = (instance as any).handleWheel.bind(instance)
 
       const wheelUpEvent = createWheelEvent(-100) // Negative deltaY is wheel up
-      handleWheel(wheelUpEvent)
+      handleWheel(wheelUpEvent as unknown as WheelEvent)
       expect(wheelUpEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,100.00')
     })
 
     it('decrements value on wheel down', () => {
-      // @ts-expect-error Accessing private method
-      const handleWheel = instance.handleWheel.bind(instance)
+      const handleWheel = (instance as any).handleWheel.bind(instance)
 
       const wheelDownEvent = createWheelEvent(100) // Positive deltaY is wheel down
-      handleWheel(wheelDownEvent)
+      handleWheel(wheelDownEvent as unknown as WheelEvent)
       expect(wheelDownEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('900.00')
     })
@@ -196,17 +233,16 @@ describe('Numbers Event Handling', () => {
     it('uses progressive step size based on value magnitude', () => {
       element.value = '10000'
 
-      // @ts-expect-error Accessing private method
-      const handleWheel = instance.handleWheel.bind(instance)
+      const handleWheel = (instance as any).handleWheel.bind(instance)
 
       const wheelUpEvent = createWheelEvent(-100)
-      handleWheel(wheelUpEvent)
+      handleWheel(wheelUpEvent as unknown as WheelEvent)
       expect(element.value).toContain('10,100') // Step of 100 for value in thousands
 
       element.value = '5'
 
       const wheelDownEvent = createWheelEvent(100)
-      handleWheel(wheelDownEvent)
+      handleWheel(wheelDownEvent as unknown as WheelEvent)
       expect(element.value).toContain('4.9') // Step of 0.1 for value < 10
     })
 
@@ -222,33 +258,32 @@ describe('Numbers Event Handling', () => {
         writable: true,
       })
 
-      // @ts-expect-error Accessing private method
-      const handleWheel = instance.handleWheel.bind(instance)
+      const handleWheel = (instance as any).handleWheel.bind(instance)
 
       const wheelUpEvent = createWheelEvent(-100)
-      handleWheel(wheelUpEvent)
+      handleWheel(wheelUpEvent as unknown as WheelEvent)
       expect(wheelUpEvent.preventDefault).toHaveBeenCalled()
       expect(element.value).toContain('1,100.00')
 
-      // Now with hover mode off, it should do nothing
+      // Now disable wheel event handling
       instance.update({
-        wheelOn: 'none',
+        wheelOn: 'focus', // Only 'focus' and 'hover' are valid
+        modifyValueOnWheel: false, // Disable wheel
       })
 
       const wheelUpEvent2 = createWheelEvent(-100)
-      handleWheel(wheelUpEvent2)
+      handleWheel(wheelUpEvent2 as unknown as WheelEvent)
       expect(element.value).toContain('1,100.00') // No change
     })
   })
 
   describe('Focus and Blur Events', () => {
-    let element: any
+    let element: MockHTMLElement
     let instance: Numbers
 
     beforeEach(() => {
       element = createMockElement('input', '1000.5')
-      // @ts-expect-error Mock element
-      instance = new Numbers(element, {
+      instance = new Numbers(element as unknown as HTMLElement, {
         selectOnFocus: true,
         decimalPlacesShownOnFocus: 3,
         decimalPlacesShownOnBlur: 0,
@@ -256,11 +291,10 @@ describe('Numbers Event Handling', () => {
     })
 
     it('applies focus formatting', () => {
-      // @ts-expect-error Accessing private method
-      const handleFocus = instance.handleFocus.bind(instance)
+      const handleFocus = (instance as any).handleFocus.bind(instance)
 
       const focusEvent = createFocusEvent()
-      handleFocus(focusEvent)
+      handleFocus(focusEvent as unknown as FocusEvent)
 
       // Should show 3 decimal places on focus
       expect(element.value).toContain('1,000.500')
@@ -273,11 +307,10 @@ describe('Numbers Event Handling', () => {
     })
 
     it('applies blur formatting', () => {
-      // @ts-expect-error Accessing private method
-      const handleBlur = instance.handleBlur.bind(instance)
+      const handleBlur = (instance as any).handleBlur.bind(instance)
 
       const blurEvent = createFocusEvent()
-      handleBlur(blurEvent)
+      handleBlur(blurEvent as unknown as FocusEvent)
 
       // Should show 0 decimal places on blur
       expect(element.value).toContain('1,001') // Updated to match actual implementation
@@ -289,11 +322,10 @@ describe('Numbers Event Handling', () => {
         symbolWhenUnfocused: 'K',
       })
 
-      // @ts-expect-error Accessing private method
-      const handleBlur = instance.handleBlur.bind(instance)
+      const handleBlur = (instance as any).handleBlur.bind(instance)
 
       const blurEvent = createFocusEvent()
-      handleBlur(blurEvent)
+      handleBlur(blurEvent as unknown as FocusEvent)
 
       // Should divide by 1000 and add K suffix
       expect(element.value).toContain('1K')
@@ -307,11 +339,10 @@ describe('Numbers Event Handling', () => {
       // Set a negative value
       instance.set(-1000)
 
-      // @ts-expect-error Accessing private method
-      const handleBlur = instance.handleBlur.bind(instance)
+      const handleBlur = (instance as any).handleBlur.bind(instance)
 
       const blurEvent = createFocusEvent()
-      handleBlur(blurEvent)
+      handleBlur(blurEvent as unknown as FocusEvent)
 
       // Should replace minus sign with brackets
       expect(element.value).toContain('(1,000)')
@@ -319,33 +350,33 @@ describe('Numbers Event Handling', () => {
   })
 
   describe('Custom Events', () => {
-    let element: any
+    let element: MockHTMLElement
     let instance: Numbers
 
     beforeEach(() => {
       element = createMockElement('input', '1000')
-      // @ts-expect-error Mock element
-      instance = new Numbers(element)
+      instance = new Numbers(element as unknown as HTMLElement)
     })
 
     it('dispatches custom events', () => {
       // Setup a mock element with spies
-      const element = document.createElement('input')
-      element.dispatchEvent = mock()
+      const realElement = document.createElement('input')
+      const dispatchMock = mock()
+      realElement.dispatchEvent = dispatchMock
 
       // Create a private method instance to test
       const privateDispatchEvent = (eventName: string, detail?: any) => {
         const eventType = `numbers:${eventName}`
         const customEvent = new CustomEvent(eventType, { detail, bubbles: true })
-        element.dispatchEvent(customEvent)
+        realElement.dispatchEvent(customEvent)
       }
 
       // Call the method
       privateDispatchEvent('test', { value: 1000 })
-      expect(element.dispatchEvent).toHaveBeenCalled()
+      expect(dispatchMock).toHaveBeenCalled()
 
       // Verify the event type
-      const eventArg = element.dispatchEvent.mock.calls[0][0]
+      const eventArg = dispatchMock.mock.calls[0][0]
       expect(eventArg.type).toBe('numbers:test')
       expect(eventArg.detail).toEqual({ value: 1000 })
     })
@@ -359,11 +390,10 @@ describe('Numbers Event Handling', () => {
         },
       })
 
-      // @ts-expect-error Accessing private method
-      const handleKeyboardShortcuts = instance.handleKeyboardShortcuts.bind(instance)
+      const handleKeyboardShortcuts = (instance as any).handleKeyboardShortcuts.bind(instance)
 
       const customEvent = createKeyboardEvent('X', { altKey: true })
-      handleKeyboardShortcuts(customEvent)
+      handleKeyboardShortcuts(customEvent as unknown as KeyboardEvent)
 
       expect(customEvent.preventDefault).toHaveBeenCalled()
       expect(instance.getConfig().keyboardShortcuts?.custom?.['Alt+X']).toHaveBeenCalled()
