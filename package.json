@@ -1,7 +1,7 @@
 {
   "name": "ts-numbers",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A powerful yet lightweight library for formatting and parsing numbers.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
