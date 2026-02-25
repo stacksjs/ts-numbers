@@ -15,7 +15,7 @@ ts-numbers is a powerful yet lightweight TypeScript library for formatting and p
 - **Scientific Notation**: Format very large or small numbers with scientific notation
 - **Advanced Features**: Presets, extended persistence, style rules, and more
 
-## Why ts-numbers?
+## Why ts-numbers
 
 ts-numbers is designed to solve the complex problem of number formatting and input handling in web applications. It provides a consistent and powerful API for handling numeric values with the following benefits:
 
@@ -52,11 +52,11 @@ Ready to get started? Check out the [Installation](/install) guide next.
 It's rather simple to get your package development started:
 
 ```bash
-# you may use this GitHub template or the following command:
+# you may use this GitHub template or the following command
 bunx degit stacksjs/ts-numbers my-pkg
 cd my-pkg
 
- # if you don't have pnpm installed, run `npm i -g pnpm`
+# if you don't have pnpm installed, run `npm i -g pnpm`
 bun i # install all deps
 bun run build # builds the library for production-ready use
 

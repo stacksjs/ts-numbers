@@ -1,7 +1,6 @@
 
 ## ...main
 
-
 ### 🚀 Enhancements
 
 - Add accounting standards ([ff0547c](https://github.com/stacksjs/ts-numbers/commit/ff0547c))
@@ -30,4 +29,3 @@
 ### ❤️ Contributors
 
 - Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
-

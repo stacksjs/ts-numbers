@@ -32,5 +32,3 @@ features:
     icon: "🌎"
     details: "Support for different locales, numbering systems, and RTL text."
 ---
-
-<Home />

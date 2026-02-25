@@ -16,48 +16,62 @@ import type { NumbersConfig } from 'ts-numbers'
 
 const config: NumbersConfig = {
   /**
-   * Core formatting options
-   */
+
+   _ Core formatting options
+
+   _/
   decimalPlaces: 2,
   decimalCharacter: '.',
   digitGroupSeparator: ',',
 
   /**
-   * Currency options
-   */
+
+   _ Currency options
+
+   _/
   currencySymbol: '$',
   currencySymbolPlacement: 'p',
 
   /**
-   * Number constraints
-   */
+
+   _ Number constraints
+
+   _/
   minimumValue: undefined,
   maximumValue: undefined,
 
   /**
-   * Decimal behavior
-   */
+
+   _ Decimal behavior
+
+   _/
   allowDecimalPadding: true,
   alwaysAllowDecimalCharacter: false,
 
   /**
-   * Display and interaction
-   */
+
+   _ Display and interaction
+
+   _/
   caretPositionOnFocus: null,
   emptyInputBehavior: 'focus',
   leadingZero: 'deny',
   negativePositiveSignPlacement: 'l',
 
   /**
-   * Interaction options
-   */
+
+   _ Interaction options
+
+   _/
   selectOnFocus: false,
   readOnly: false,
   modifyValueOnWheel: false,
 
   /**
-   * Miscellaneous
-   */
+
+   _ Miscellaneous
+
+   _/
   roundingMethod: 'S',
   verbose: false,
 }
