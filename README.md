@@ -1,10 +1,8 @@
 <p align="center"><img src=".github/art/cover.jpg" alt="Social Card of ts-numbers"></p>
 
-[![npm version][npm-version-src]][npm-version-href]
-[![GitHub Actions][github-actions-src]][github-actions-href]
+[![npm version](https://img.shields.io/npm/v/ts-numbers?style=flat-square)](https://npmjs.com/package/ts-numbers)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/stacksjs/ts-numbers/ci.yml?style=flat-square&branch=main)](https://github.com/stacksjs/ts-numbers/actions?query=workflow%3Aci)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-<!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
-<!-- [![Codecov][codecov-src]][codecov-href] -->
 
 # ts-numbers
 
@@ -213,12 +211,3 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 The MIT License (MIT). Please see [LICENSE](LICENSE.md) for more information.
 
 Made with 💙
-
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/ts-numbers?style=flat-square
-[npm-version-href]: https://npmjs.com/package/ts-numbers
-[github-actions-src]: https://img.shields.io/github/actions/workflow/status/stacksjs/ts-numbers/ci.yml?style=flat-square&branch=main
-[github-actions-href]: https://github.com/stacksjs/ts-numbers/actions?query=workflow%3Aci
-
-<!-- [codecov-src]: https://img.shields.io/codecov/c/gh/stacksjs/ts-numbers/main?style=flat-square
-[codecov-href]: https://codecov.io/gh/stacksjs/ts-numbers -->

@@ -64,7 +64,7 @@ bun run build # builds the library for production-ready use
 bun run release # automates git commits, versioning, and changelog generations
 ```
 
-_Check out the package.json scripts for more commands._
+Check out the package.json scripts for more commands.
 
 ### Developer Experience (DX)
 
@@ -125,8 +125,3 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 The MIT License (MIT). Please see [LICENSE](https://github.com/stacksjs/ts-numbers/tree/main/LICENSE.md) for more information.
 
 Made with 💙
-
-<!-- Badges -->
-
-<!-- [codecov-src]: https://img.shields.io/codecov/c/gh/stacksjs/rpx/main?style=flat-square
-[codecov-href]: https://codecov.io/gh/stacksjs/rpx -->

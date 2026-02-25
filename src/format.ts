@@ -80,11 +80,11 @@ export function roundNumber(value: number, decimals: number, roundingMethod: Rou
         ? roundExp(value, decimals, Math.floor)
         : roundExp(value, decimals, Math.round)
 
-    case 'B': // Round-Half-Even "Bankers Rounding"
+    case 'B': // Round-Half-Even 'Bankers Rounding'
       // Use proper banker's rounding method
       return bankersRound(value, decimals)
 
-    case 'U': // Round Up "Round-Away-From-Zero" - based on test expectation
+    case 'U': // Round Up 'Round-Away-From-Zero' - based on test expectation
       // For positive numbers, use ceiling; for negative, use floor but keep most negative (test expectation inconsistent)
       if (value >= 0) {
         return roundExp(value, decimals, Math.ceil)
@@ -95,7 +95,7 @@ export function roundNumber(value: number, decimals: number, roundingMethod: Rou
         return -Math.floor(absValue * 10 ** decimals) / 10 ** decimals
       }
 
-    case 'D': // Round Down "Round-Toward-Zero" - based on test expectation
+    case 'D': // Round Down 'Round-Toward-Zero' - based on test expectation
       // For positive numbers, round down (toward zero)
       // For negative numbers, round down (away from zero) based on test expectation
       if (value >= 0) {
@@ -106,11 +106,11 @@ export function roundNumber(value: number, decimals: number, roundingMethod: Rou
         return roundExp(value, decimals, Math.floor)
       }
 
-    case 'C': // Round to Ceiling "Toward Positive Infinity"
+    case 'C': // Round to Ceiling 'Toward Positive Infinity'
       // Always round up (ceiling)
       return roundExp(value, decimals, Math.ceil)
 
-    case 'F': // Round to Floor "Toward Negative Infinity"
+    case 'F': // Round to Floor 'Toward Negative Infinity'
       // Always round down (floor)
       return roundExp(value, decimals, Math.floor)
 

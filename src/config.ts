@@ -103,7 +103,7 @@ export const defaultConfig: NumbersConfig = {
   activeCurrency: undefined,
 }
 
-// eslint-disable-next-line antfu/no-top-level-await
+// eslint-disable-next-line ts/no-top-level-await
 export const config: NumbersConfig = await loadConfig({
   name: 'numbers',
   defaultConfig,
