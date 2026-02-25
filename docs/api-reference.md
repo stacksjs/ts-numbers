@@ -21,7 +21,7 @@ Creates a new Numbers instance.
 
 | Method | Description |
 |--------|-------------|
-| `set(value: number \| string)` | Sets a new value with formatting applied |
+| `set(value: number &#124; string)` | Sets a new value with formatting applied |
 | `get()` | Gets the current value as a string |
 | `getNumber()` | Gets the current value as a number |
 | `getLocalized()` | Gets the localized value according to current configuration |
@@ -45,16 +45,16 @@ All instance methods (except `getNumber()`, `get()`, `getElement()`, etc.) retur
 |--------|------|---------|-------------|
 | `decimalPlaces` | number | 2 | Number of decimal places to display |
 | `decimalCharacter` | string | '.' | Character used for the decimal separator |
-| `decimalCharacterAlternative` | string \| null | null | Alternative decimal character (e.g., ',') |
+| `decimalCharacterAlternative` | string &#124; null | null | Alternative decimal character (e.g., ',') |
 | `digitGroupSeparator` | string | ',' | Character used for thousands separator |
-| `digitGroupSpacing` | string \| number | 3 | Number of digits between separators |
+| `digitGroupSpacing` | string &#124; number | 3 | Number of digits between separators |
 
 ### Currency Formatting
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `currencySymbol` | string | '' | Currency symbol to display |
-| `currencySymbolPlacement` | 'p' \| 's' | 'p' | Placement of currency symbol: prefix or suffix |
+| `currencySymbolPlacement` | 'p' &#124; 's' | 'p' | Placement of currency symbol: prefix or suffix |
 
 ### Number Constraints
 
@@ -62,28 +62,28 @@ All instance methods (except `getNumber()`, `get()`, `getElement()`, etc.) retur
 |--------|------|---------|-------------|
 | `minimumValue` | string | undefined | Minimum allowed value |
 | `maximumValue` | string | undefined | Maximum allowed value |
-| `overrideMinMaxLimits` | 'ceiling' \| 'floor' \| 'ignore' \| 'invalid' \| null | null | Behavior when value exceeds min/max limits |
+| `overrideMinMaxLimits` | 'ceiling' &#124; 'floor' &#124; 'ignore' &#124; 'invalid' &#124; null | null | Behavior when value exceeds min/max limits |
 
 ### Decimal Behavior
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `allowDecimalPadding` | boolean \| 'floats' | true | Whether to pad decimals with zeros |
+| `allowDecimalPadding` | boolean &#124; 'floats' | true | Whether to pad decimals with zeros |
 | `alwaysAllowDecimalCharacter` | boolean | false | Always allow decimal character (even if decimalPlaces: 0) |
 
 ### Display and Interaction
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `caretPositionOnFocus` | 'start' \| 'end' \| 'decimalChar' \| null | null | Where to position cursor on focus |
+| `caretPositionOnFocus` | 'start' &#124; 'end' &#124; 'decimalChar' &#124; null | null | Where to position cursor on focus |
 | `emptyInputBehavior` | string | 'focus' | Behavior when input is empty |
-| `leadingZero` | 'allow' \| 'deny' \| 'keep' | 'deny' | How to handle leading zeros |
-| `negativePositiveSignPlacement` | 'l' \| 'r' \| 'p' \| 's' \| null | 'l' | Position of negative/positive sign |
+| `leadingZero` | 'allow' &#124; 'deny' &#124; 'keep' | 'deny' | How to handle leading zeros |
+| `negativePositiveSignPlacement` | 'l' &#124; 'r' &#124; 'p' &#124; 's' &#124; null | 'l' | Position of negative/positive sign |
 | `negativeSignCharacter` | string | '-' | Character for negative sign |
 | `positiveSignCharacter` | string | '+' | Character for positive sign |
 | `showPositiveSign` | boolean | false | Whether to show plus sign for positive numbers |
 | `suffixText` | string | '' | Text to append after the number |
-| `negativeBracketsTypeOnBlur` | string \| null | null | Brackets for negative numbers, e.g., '(,)' |
+| `negativeBracketsTypeOnBlur` | string &#124; null | null | Brackets for negative numbers, e.g., '(,)' |
 
 ### Interaction Options
 
@@ -93,25 +93,25 @@ All instance methods (except `getNumber()`, `get()`, `getElement()`, etc.) retur
 | `selectNumberOnly` | boolean | false | Select only the numeric part on focus |
 | `readOnly` | boolean | false | Make the input read-only |
 | `modifyValueOnWheel` | boolean | false | Allow value change via mouse wheel |
-| `wheelStep` | 'progressive' \| string \| number | 1 | Increment size for mouse wheel |
+| `wheelStep` | 'progressive' &#124; string &#124; number | 1 | Increment size for mouse wheel |
 | `modifyValueOnUpDownArrow` | boolean | false | Allow value change via up/down arrow keys |
-| `upDownStep` | 'progressive' \| string \| number | 1 | Increment size for arrow keys |
-| `wheelOn` | 'focus' \| 'hover' | 'focus' | When to apply wheel events |
+| `upDownStep` | 'progressive' &#124; string &#124; number | 1 | Increment size for arrow keys |
+| `wheelOn` | 'focus' &#124; 'hover' | 'focus' | When to apply wheel events |
 
 ### Scaling Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `divisorWhenUnfocused` | number \| null | null | Divisor applied to value when not focused |
-| `decimalPlacesShownOnBlur` | number \| null | null | Decimal places shown when element loses focus |
-| `decimalPlacesShownOnFocus` | number \| null | null | Decimal places shown when element has focus |
-| `symbolWhenUnfocused` | string \| null | null | Symbol to show when not focused |
+| `divisorWhenUnfocused` | number &#124; null | null | Divisor applied to value when not focused |
+| `decimalPlacesShownOnBlur` | number &#124; null | null | Decimal places shown when element loses focus |
+| `decimalPlacesShownOnFocus` | number &#124; null | null | Decimal places shown when element has focus |
+| `symbolWhenUnfocused` | string &#124; null | null | Symbol to show when not focused |
 
 ### Specialized Types
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `isSpecializedType` | string \| null | null | Type of specialized formatting: 'phone', 'temperature', etc. |
+| `isSpecializedType` | string &#124; null | null | Type of specialized formatting: 'phone', 'temperature', etc. |
 | `specializedOptions` | object | undefined | Options for the specialized type |
 
 ### Scientific Notation
