@@ -2,7 +2,7 @@
 
 ## About
 
-A powerful yet lightweight library for formatting and parsing numbers.
+A comprehensive TypeScript library for formatting numbers, currencies, and handling numeric inputs with advanced features. It supports multiple currency formatting, scientific notation, phone/IP/credit card formatting, temperature/weight/length unit conversions, and locale-specific internationalization with RTL support. It also provides input element integration with automatic formatting, copy/paste conversion, keyboard shortcuts, undo/redo history, and data persistence. Inspired by AutoNumeric.
 
 ## Linting
 
