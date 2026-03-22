@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^19.0.2",
-    "@stacksjs/docs": "^0.70.23",
     "typescript": "^5.9.3",
     "better-dx": "^0.2.7"
   },
