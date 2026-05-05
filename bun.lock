@@ -6,7 +6,7 @@
       "name": "ts-numbers",
       "devDependencies": {
         "@happy-dom/global-registrator": "^19.0.2",
-        "better-dx": "^0.2.7",
+        "better-dx": "^0.2.12",
         "typescript": "^5.9.3",
       },
     },
