@@ -4,37 +4,45 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
-  npm:
-    name: npm
+  release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
         with:
           fetch-depth: 0
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v2.0.2
-
-      - name: Use cached node_modules
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            node-modules-
+      - name: Setup Pantry
+        uses: home-lang/pantry/packages/action@main
 
       - name: Install Dependencies
         run: bun install
 
       - name: Publish to npm
-        run: bun publish --access public
+        # `pantry publish --npm` runs the same `bun publish` flow but goes
+        # through the pantry CLI for monorepo discovery and `prepublishOnly`
+        # handling. NPM_TOKEN is the npm auth token (not the pantry one).
+        run: pantry publish --npm --access public
         env:
-          BUN_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create GitHub release
-        run: bunx changelogithub
+      - name: Publish to Pantry registry
+        # Mirrors the npm publish above so installs via `pantry add ts-numbers`
+        # see the same version. The HTTP-token path keeps this workflow free
+        # of AWS credential management — the registry server validates the
+        # token and forwards to S3 + DynamoDB.
+        run: pantry publish --access public --tag latest
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PANTRY_REGISTRY_TOKEN: ${{ secrets.PANTRY_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: stacksjs/action-releaser@v1.2.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
