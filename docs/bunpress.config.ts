@@ -1,11 +1,9 @@
-import type { BunpressConfig } from 'bunpress'
+import type { BunPressConfig } from '@stacksjs/bunpress'
 
-const config: BunpressConfig = {
-  name: 'ts-numbers',
+const config: BunPressConfig = {
+  title: 'ts-numbers',
   description: 'Comprehensive TypeScript library for formatting numbers, currencies, and numeric inputs',
   url: 'https://ts-numbers.stacksjs.org',
-  theme: 'docs',
-
   nav: [
     { text: 'Guide', link: '/guide' },
     { text: 'Features', link: '/features' },
@@ -39,16 +37,17 @@ const config: BunpressConfig = {
     ],
   },
 
-  search: true,
-  editLink: {
-    pattern: 'https://github.com/stacksjs/ts-numbers/edit/main/docs/:path',
-    text: 'Edit this page on GitHub',
+  themeConfig: {
+    editLink: {
+      pattern: 'https://github.com/stacksjs/ts-numbers/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/stacksjs/ts-numbers' },
+      { icon: 'discord', link: 'https://discord.gg/stacksjs' },
+    ],
   },
 
-  socialLinks: [
-    { icon: 'github', link: 'https://github.com/stacksjs/ts-numbers' },
-    { icon: 'discord', link: 'https://discord.gg/stacksjs' },
-  ],
 }
 
 export default config

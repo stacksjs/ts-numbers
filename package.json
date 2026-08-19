@@ -66,8 +66,9 @@
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^19.0.2",
-    "typescript": "^7.0.2",
-    "better-dx": "^0.2.15"
+    "@stacksjs/bunpress": "^0.2.11",
+    "better-dx": "^0.2.15",
+    "typescript": "^7.0.2"
   },
   "git-hooks": {
     "pre-commit": {
