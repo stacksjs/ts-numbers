@@ -40,7 +40,7 @@ jobs:
         # token and forwards to S3 + DynamoDB.
         run: pantry publish --access public --tag latest
         env:
-          PANTRY_REGISTRY_TOKEN: ${{ secrets.PANTRY_TOKEN }}
+          PANTRY_TOKEN: ${{ secrets.PANTRY_TOKEN }}
 
       - name: Create GitHub Release
         uses: stacksjs/action-releaser@v1.2.9
